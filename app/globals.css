@@ -11,3 +11,117 @@ body {
   color: #e8e0cc;
   font-family: Georgia, serif;
 }
+
+/* Custom scrollbar — 중립 은회색 (모든 페이지 테마와 어울림) */
+html,
+body,
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track,
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb,
+*::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 10px;
+  transition: background 0.2s;
+}
+
+html::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover,
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* ─────────────────────────────────────
+   데스크톱 배경 — 모바일 뷰 양옆 채우기
+   ───────────────────────────────────── */
+@media (min-width: 600px) {
+  html {
+    background:
+      radial-gradient(ellipse 60% 50% at 30% 20%, rgba(112, 96, 224, 0.12), transparent 60%),
+      radial-gradient(ellipse 50% 40% at 70% 80%, rgba(160, 64, 192, 0.1), transparent 60%),
+      radial-gradient(ellipse 40% 40% at 90% 30%, rgba(64, 128, 200, 0.08), transparent 60%),
+      radial-gradient(ellipse 40% 40% at 10% 70%, rgba(80, 60, 180, 0.08), transparent 60%),
+      #04030a !important;
+    background-attachment: fixed !important;
+  }
+  body {
+    background: transparent !important;
+    position: relative;
+  }
+  /* 별빛 layer (html에 직접 두면 가려지므로 body::before로) */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image:
+      radial-gradient(1.5px 1.5px at 5% 12%, #fff, transparent),
+      radial-gradient(1px 1px at 12% 28%, #b0c8ff, transparent),
+      radial-gradient(2px 2px at 8% 45%, #fff, transparent),
+      radial-gradient(1px 1px at 15% 70%, #d0b0ff, transparent),
+      radial-gradient(1.5px 1.5px at 4% 88%, #c0a0ff, transparent),
+      radial-gradient(1px 1px at 88% 8%, #fff, transparent),
+      radial-gradient(1.5px 1.5px at 92% 25%, #b0c8ff, transparent),
+      radial-gradient(2px 2px at 95% 50%, #fff, transparent),
+      radial-gradient(1px 1px at 90% 72%, #d0b0ff, transparent),
+      radial-gradient(1.5px 1.5px at 96% 90%, #c0a0ff, transparent);
+    background-size: 100% 100%;
+    opacity: 0.7;
+    animation: bg-twinkle 5s ease-in-out infinite;
+  }
+  @keyframes bg-twinkle {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 0.85; }
+  }
+  /* 모바일 뷰 z-index만 확보 (글로우 제거) */
+  body > div > .app,
+  body .app {
+    position: relative;
+    z-index: 1;
+  }
+  /* 데스크톱 좌우 사이드 텍스트 (장식) */
+  body::after {
+    content: "命  理  天  月";
+    position: fixed;
+    top: 50%;
+    left: 0;
+    right: 0;
+    pointer-events: none;
+    z-index: 0;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 56px;
+    letter-spacing: 24px;
+    color: rgba(160, 140, 240, 0.04);
+    text-align: center;
+    transform: translateY(-50%);
+  }
+}
+
+@media (min-width: 1100px) {
+  body::after {
+    font-size: 80px;
+    letter-spacing: 40px;
+    color: rgba(160, 140, 240, 0.05);
+  }
+}
