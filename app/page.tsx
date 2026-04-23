@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { HomeDesktop } from "@/app/components/HomeDesktop";
 export default function Home() {
   const [activeTab, setActiveTab] = useState("home");
   const router = useRouter();
@@ -17,6 +18,25 @@ export default function Home() {
     { id: "tojeong", icon: "📜", label: "토정비결", free: true, path: "/tojeong" },
     { id: "replay", icon: "📦", label: "보관함", free: true, path: "/replay" },
   ];
+  return (
+    <>
+      <style>{`
+        @media (min-width:768px){.mobile-home{display:none !important}}
+        @media (max-width:767px){.desktop-home{display:none !important}}
+      `}</style>
+      <div className="desktop-home"><HomeDesktop characters={characters} /></div>
+      <div className="mobile-home"><MobileHome characters={characters} tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} router={router} /></div>
+    </>
+  );
+}
+
+function MobileHome({ characters, tabs, activeTab, setActiveTab, router }: {
+  characters: { id: string; name: string; hanja: string; role: string; desc: string; tag: string; adult: boolean; image: string; color: string }[];
+  tabs: { id: string; icon: string; label: string; free: boolean; path: string }[];
+  activeTab: string;
+  setActiveTab: (s: string) => void;
+  router: ReturnType<typeof useRouter>;
+}) {
   return (
     <>
       <style>{`
