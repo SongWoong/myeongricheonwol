@@ -96,8 +96,13 @@ export default function TarotPage() {
           })),
         }),
       });
+      if (!res.ok) {
+        const txt = await res.text();
+        let msg = `서버 오류 (${res.status})`;
+        try { msg = JSON.parse(txt).error || msg; } catch { msg += ` — ${txt.slice(0, 120)}`; }
+        throw new Error(msg);
+      }
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || `서버 오류 (${res.status})`);
       setResult(data.result || "");
       if (spread.id === "single") {
         recordSingleLimit();
