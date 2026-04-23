@@ -40,14 +40,14 @@ export function HomeDesktop({ characters }: Props) {
 
         /* ───────── 헤더 바 (불투명 풀와이드) ───────── */
         .d-header{position:fixed;top:0;left:0;right:0;z-index:100;height:72px;display:flex;align-items:center;background:#0a0612;border-bottom:1px solid rgba(255,255,255,0.1)}
-        .d-header-inner{width:100%;display:flex;align-items:center;justify-content:space-between;padding:0 40px}
-        .d-logo{cursor:pointer;flex-shrink:0;white-space:nowrap}
+        .d-header-inner{width:100%;display:flex;align-items:center;justify-content:space-between;padding:0}
+        .d-logo{cursor:pointer;flex-shrink:0;white-space:nowrap;padding:0 40px}
         .d-logo-mark{font-family:'Diphylleia','Noto Serif KR',serif;font-size:22px;color:#fff;letter-spacing:8px;font-weight:500}
         .d-nav{flex:1;display:flex;align-items:center;justify-content:center;gap:40px;white-space:nowrap;padding:0 40px}
         .d-nav-item{font-family:'Noto Serif KR',serif;font-size:14px;color:rgba(255,255,255,0.85);cursor:pointer;letter-spacing:2px;transition:color 0.2s;padding:6px 0;position:relative;white-space:nowrap}
         .d-nav-item:hover{color:#fff}
         .d-nav-item:hover::after{content:"";position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);width:20px;height:1px;background:rgba(255,255,255,0.8)}
-        .d-login{flex-shrink:0;padding:9px 22px;font-size:13px;border:1px solid rgba(255,255,255,0.45);color:#fff;background:transparent;cursor:pointer;font-family:'Noto Serif KR',serif;letter-spacing:3px;transition:all 0.2s;white-space:nowrap}
+        .d-login{flex-shrink:0;padding:9px 22px;font-size:13px;border:1px solid rgba(255,255,255,0.45);color:#fff;background:transparent;cursor:pointer;font-family:'Noto Serif KR',serif;letter-spacing:3px;transition:all 0.2s;white-space:nowrap;margin-right:24px}
         .d-login:hover{background:rgba(255,255,255,0.1);border-color:#fff}
 
         /* ───────── 히어로 ───────── */
