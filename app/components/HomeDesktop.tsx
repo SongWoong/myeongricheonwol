@@ -26,8 +26,9 @@ export function HomeDesktop({ characters }: Props) {
         @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;700&family=Cinzel:wght@400;500;600&family=Diphylleia&family=Cormorant+Garamond:wght@300;400;500&display=swap');
 
         .d-app{width:100%;min-height:100dvh;color:#e0e6ff;font-family:'Noto Serif KR',serif;position:relative;overflow-x:hidden;background:#04030a}
-        /* 브라우저 전체 배경 = 달 이미지 (고정, 풀블리드) */
-        .d-page-bg{position:fixed;inset:0;z-index:0;background:url('/bg.png') center top/cover no-repeat;pointer-events:none}
+        /* 브라우저 전체 배경 = 달 이미지 (고정, 풀블리드, seam 없음) */
+        .d-page-bg{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:0;pointer-events:none;overflow:hidden}
+        .d-page-bg img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;object-position:center center}
 
         /* ───────── 배경 — 구름 + 별빛 (전체 페이지) ───────── */
         .d-bg-stars{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:
@@ -115,8 +116,8 @@ export function HomeDesktop({ characters }: Props) {
         .d-hero-scroll-line{width:1px;height:30px;background:linear-gradient(to bottom,rgba(255,255,255,0.5),transparent);animation:d-line-pulse 2s ease-in-out infinite}
         @keyframes d-line-pulse{0%,100%{opacity:0.3;transform:scaleY(1)}50%{opacity:1;transform:scaleY(1.3)}}
 
-        /* ───────── 통계 띠 ───────── */
-        .d-stats-band{position:relative;z-index:3;background:linear-gradient(to right,transparent,rgba(20,16,40,0.85) 15%,rgba(20,16,40,0.85) 85%,transparent);border-top:1px solid rgba(140,120,220,0.18);border-bottom:1px solid rgba(140,120,220,0.18);padding:44px 0}
+        /* ───────── 통계 띠 (경계선 없이) ───────── */
+        .d-stats-band{position:relative;z-index:3;padding:44px 0;background:transparent}
         .d-stats{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr 1fr;padding:0 60px}
         .d-stat{text-align:center;padding:0 28px;position:relative}
         .d-stat+.d-stat::before{content:"";position:absolute;left:0;top:15%;bottom:15%;width:1px;background:linear-gradient(to bottom,transparent,rgba(180,160,255,0.4),transparent)}
@@ -195,7 +196,7 @@ export function HomeDesktop({ characters }: Props) {
         .d-footer-links span:hover{color:#c0a8e8}
       `}</style>
 
-      <div className="d-page-bg" />
+      <div className="d-page-bg"><img src="/bg.png" alt="" /></div>
       <div className="d-bg-stars" />
       <div className="d-bg-clouds" />
       <div className="d-bg-clouds2" />
