@@ -17,8 +17,6 @@ interface Props {
   characters: CharacterDef[];
 }
 
-const NUMERALS = ["壹", "貳", "參", "肆"];
-
 export function HomeDesktop({ characters }: Props) {
   const router = useRouter();
 
@@ -29,37 +27,52 @@ export function HomeDesktop({ characters }: Props) {
 
         .d-app{width:100%;min-height:100dvh;background:#04030a;color:#e0e6ff;font-family:'Noto Serif KR',serif;position:relative;overflow-x:hidden}
 
-        /* ───────── 배경 레이어 ───────── */
+        /* ───────── 배경 — 구름 + 별빛 (전체 페이지) ───────── */
         .d-bg-stars{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:
-          radial-gradient(2px 2px at 5% 8%,#fff,transparent),
-          radial-gradient(1.5px 1.5px at 12% 22%,#b0c8ff,transparent),
-          radial-gradient(2px 2px at 18% 48%,#fff,transparent),
-          radial-gradient(1px 1px at 25% 70%,#d0b0ff,transparent),
-          radial-gradient(2px 2px at 6% 88%,#c0a0ff,transparent),
-          radial-gradient(1.5px 1.5px at 88% 8%,#fff,transparent),
-          radial-gradient(2px 2px at 92% 30%,#b0c8ff,transparent),
-          radial-gradient(1px 1px at 95% 60%,#fff,transparent),
-          radial-gradient(2px 2px at 90% 80%,#d0b0ff,transparent),
-          radial-gradient(1.5px 1.5px at 96% 92%,#c0a0ff,transparent),
-          radial-gradient(1.5px 1.5px at 50% 5%,#fff,transparent),
-          radial-gradient(1px 1px at 50% 95%,#b0c8ff,transparent),
-          radial-gradient(1.5px 1.5px at 38% 35%,#fff,transparent),
-          radial-gradient(1px 1px at 65% 60%,#d0b0ff,transparent),
-          radial-gradient(2px 2px at 78% 18%,#fff,transparent);
-          background-size:100% 100%;opacity:0.55;animation:d-twinkle 4s ease-in-out infinite}
+          radial-gradient(2px 2px at 3% 8%,#fff,transparent),
+          radial-gradient(1.5px 1.5px at 8% 22%,#b0c8ff,transparent),
+          radial-gradient(2px 2px at 14% 48%,#fff,transparent),
+          radial-gradient(1px 1px at 21% 70%,#d0b0ff,transparent),
+          radial-gradient(2px 2px at 5% 88%,#c0a0ff,transparent),
+          radial-gradient(1.5px 1.5px at 18% 12%,#fff,transparent),
+          radial-gradient(1px 1px at 28% 32%,#b0c8ff,transparent),
+          radial-gradient(1.5px 1.5px at 32% 58%,#fff,transparent),
+          radial-gradient(1px 1px at 36% 82%,#d0b0ff,transparent),
+          radial-gradient(2px 2px at 42% 18%,#fff,transparent),
+          radial-gradient(1.5px 1.5px at 48% 42%,#b0c8ff,transparent),
+          radial-gradient(1px 1px at 52% 68%,#fff,transparent),
+          radial-gradient(2px 2px at 58% 8%,#c0a0ff,transparent),
+          radial-gradient(1.5px 1.5px at 62% 36%,#fff,transparent),
+          radial-gradient(1px 1px at 68% 56%,#b0c8ff,transparent),
+          radial-gradient(2px 2px at 72% 78%,#fff,transparent),
+          radial-gradient(1.5px 1.5px at 78% 20%,#d0b0ff,transparent),
+          radial-gradient(1px 1px at 82% 44%,#fff,transparent),
+          radial-gradient(2px 2px at 86% 66%,#b0c8ff,transparent),
+          radial-gradient(1.5px 1.5px at 92% 14%,#fff,transparent),
+          radial-gradient(1px 1px at 95% 38%,#c0a0ff,transparent),
+          radial-gradient(2px 2px at 97% 62%,#fff,transparent),
+          radial-gradient(1.5px 1.5px at 96% 86%,#b0c8ff,transparent);
+          background-size:100% 100%;opacity:0.6;animation:d-twinkle 4s ease-in-out infinite}
         @keyframes d-twinkle{0%,100%{opacity:0.4}50%{opacity:0.85}}
 
-        .d-bg-glow1,.d-bg-glow2,.d-bg-glow3{position:fixed;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:1;animation:d-float 14s ease-in-out infinite}
-        .d-bg-glow1{top:5%;left:6%;width:480px;height:480px;background:rgba(112,96,224,0.18)}
-        .d-bg-glow2{bottom:8%;right:8%;width:520px;height:520px;background:rgba(160,64,192,0.16);animation-delay:5s}
-        .d-bg-glow3{top:50%;left:50%;width:600px;height:600px;background:rgba(80,140,220,0.08);animation-delay:9s;transform:translate(-50%,-50%)}
-        @keyframes d-float{0%,100%{transform:translate(0,0)}33%{transform:translate(40px,-30px)}66%{transform:translate(-30px,20px)}}
+        /* 구름 레이어 — 거대 blur radial로 안개처럼 */
+        .d-bg-clouds{position:fixed;inset:0;pointer-events:none;z-index:1;background:
+          radial-gradient(ellipse 40% 30% at 15% 20%,rgba(112,96,224,0.14),transparent 60%),
+          radial-gradient(ellipse 35% 28% at 85% 15%,rgba(80,140,220,0.12),transparent 60%),
+          radial-gradient(ellipse 45% 35% at 50% 45%,rgba(160,64,192,0.08),transparent 60%),
+          radial-gradient(ellipse 38% 30% at 20% 70%,rgba(140,100,200,0.1),transparent 60%),
+          radial-gradient(ellipse 42% 32% at 80% 75%,rgba(100,80,180,0.12),transparent 60%),
+          radial-gradient(ellipse 35% 28% at 50% 95%,rgba(80,60,160,0.1),transparent 60%);
+          animation:d-clouds-drift 40s ease-in-out infinite alternate}
+        @keyframes d-clouds-drift{0%{transform:translate(0,0)}100%{transform:translate(-20px,15px)}}
 
-        /* 양옆 한자 장식 */
-        .d-bg-hanja{position:fixed;top:0;height:100vh;width:120px;display:flex;align-items:center;justify-content:center;font-family:'Noto Serif KR',serif;font-size:120px;color:rgba(180,160,255,0.04);font-weight:300;letter-spacing:36px;writing-mode:vertical-rl;pointer-events:none;z-index:1;text-orientation:upright}
-        .d-bg-hanja.l{left:0}
-        .d-bg-hanja.r{right:0}
-        @media (max-width:1300px){.d-bg-hanja{display:none}}
+        .d-bg-clouds2{position:fixed;inset:0;pointer-events:none;z-index:1;background:
+          radial-gradient(ellipse 50% 40% at 70% 30%,rgba(180,140,240,0.08),transparent 60%),
+          radial-gradient(ellipse 45% 35% at 30% 50%,rgba(120,100,220,0.07),transparent 60%),
+          radial-gradient(ellipse 55% 40% at 90% 60%,rgba(100,80,200,0.08),transparent 60%),
+          radial-gradient(ellipse 48% 38% at 10% 85%,rgba(160,100,200,0.07),transparent 60%);
+          filter:blur(30px);animation:d-clouds-drift2 55s ease-in-out infinite alternate}
+        @keyframes d-clouds-drift2{0%{transform:translate(0,0) scale(1)}100%{transform:translate(25px,-20px) scale(1.05)}}
 
         /* ───────── 헤더 ───────── */
         .d-header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(4,3,10,0.6);backdrop-filter:blur(24px);border-bottom:1px solid rgba(140,120,220,0.1)}
@@ -85,18 +98,7 @@ export function HomeDesktop({ characters }: Props) {
         .d-hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,3,10,0.55) 0%,rgba(4,3,10,0.3) 35%,rgba(4,3,10,0.55) 65%,rgba(4,3,10,0.95) 100%);z-index:2}
         .d-hero-vignette{position:absolute;inset:0;background:radial-gradient(ellipse 70% 80% at 50% 50%,transparent,rgba(4,3,10,0.6));z-index:2;pointer-events:none}
 
-        /* 4코너 액자 */
-        .d-hero-corner{position:absolute;width:120px;height:120px;border:1px solid rgba(220,200,255,0.45);z-index:3}
-        .d-hero-corner::before,.d-hero-corner::after{content:"";position:absolute;background:rgba(220,200,255,0.5);box-shadow:0 0 8px rgba(220,200,255,0.6)}
-        .d-hero-corner::before{width:6px;height:6px;border-radius:50%}
-        .d-hero-corner.tl{top:60px;left:60px;border-right:none;border-bottom:none}
-        .d-hero-corner.tl::before{top:-3px;left:-3px}
-        .d-hero-corner.tr{top:60px;right:60px;border-left:none;border-bottom:none}
-        .d-hero-corner.tr::before{top:-3px;right:-3px}
-        .d-hero-corner.bl{bottom:60px;left:60px;border-right:none;border-top:none}
-        .d-hero-corner.bl::before{bottom:-3px;left:-3px}
-        .d-hero-corner.br{bottom:60px;right:60px;border-left:none;border-top:none}
-        .d-hero-corner.br::before{bottom:-3px;right:-3px}
+        /* (히어로 코너 액자 제거됨) */
 
         .d-hero-text{position:relative;z-index:4;text-align:center;padding:0 60px;max-width:1100px;animation:d-fade-up 1.4s ease-out}
         @keyframes d-fade-up{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
@@ -137,16 +139,14 @@ export function HomeDesktop({ characters }: Props) {
 
         /* ───────── 캐릭터 카드 ───────── */
         .d-char-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:32px}
-        .d-char-card{position:relative;cursor:pointer;background:rgba(8,6,22,0.7);border:1px solid rgba(140,120,220,0.2);transition:all 0.4s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;animation:d-card-fade 0.8s ease-out backwards}
+        .d-char-card{position:relative;cursor:pointer;background:rgba(8,6,22,0.5);border:none;transition:all 0.4s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;animation:d-card-fade 0.8s ease-out backwards}
         .d-char-card:nth-child(1){animation-delay:0.05s}
         .d-char-card:nth-child(2){animation-delay:0.15s}
         .d-char-card:nth-child(3){animation-delay:0.25s}
         .d-char-card:nth-child(4){animation-delay:0.35s}
         @keyframes d-card-fade{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-        .d-char-card::before{content:"";position:absolute;inset:0;border:1px solid transparent;pointer-events:none;transition:all 0.35s;z-index:5}
-        .d-char-card:hover{transform:translateY(-12px);box-shadow:0 28px 70px rgba(80,60,150,0.45);border-color:rgba(180,160,255,0.4)}
-        .d-char-card:hover::before{border-color:rgba(220,200,255,0.55);inset:8px}
-        .d-char-num{position:absolute;top:14px;left:14px;font-family:'Noto Serif KR',serif;font-size:18px;color:rgba(255,255,255,0.5);letter-spacing:0;z-index:3;font-weight:300;background:rgba(0,0,0,0.4);width:34px;height:34px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.2);backdrop-filter:blur(8px)}
+        .d-char-card:hover{transform:translateY(-12px);box-shadow:0 28px 70px rgba(80,60,150,0.5)}
+        .d-char-num{display:none}
         .d-char-img{position:relative;aspect-ratio:3/4;overflow:hidden}
         .d-char-img img{width:100%;height:100%;object-fit:cover;object-position:top;display:block;transition:transform 0.7s}
         .d-char-card:hover .d-char-img img{transform:scale(1.08)}
@@ -154,7 +154,7 @@ export function HomeDesktop({ characters }: Props) {
         .d-char-name-overlay{position:absolute;bottom:22px;left:0;right:0;text-align:center;z-index:2;padding:0 16px}
         .d-char-name{font-family:'Noto Serif KR',serif;font-size:30px;color:#fff;letter-spacing:10px;text-shadow:0 2px 14px rgba(0,0,0,0.95);margin-bottom:5px;font-weight:500}
         .d-char-hanja{font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:7px}
-        .d-char-body{padding:24px 24px 28px;text-align:center;border-top:1px solid rgba(140,120,220,0.15);background:rgba(8,6,22,0.95)}
+        .d-char-body{padding:24px 24px 28px;text-align:center;background:rgba(8,6,22,0.85)}
         .d-char-role{font-family:sans-serif;font-size:11px;font-weight:700;letter-spacing:6px;margin-bottom:12px}
         .d-char-desc{font-family:sans-serif;font-size:13px;color:rgba(255,255,255,0.62);line-height:1.7;margin-bottom:16px;min-height:44px}
         .d-char-tag{font-family:sans-serif;font-size:10px;padding:6px 14px;border-radius:1px;display:inline-block;letter-spacing:2.5px}
@@ -164,10 +164,8 @@ export function HomeDesktop({ characters }: Props) {
         /* ───────── 듀오 섹션 ───────── */
         .d-duo-section{position:relative;z-index:3;width:100%;padding:60px 0 160px}
         .d-duo-inner{max-width:1500px;margin:0 auto;padding:0 60px}
-        .d-duo-card{position:relative;overflow:hidden;cursor:pointer;background:linear-gradient(135deg,rgba(40,30,80,0.92),rgba(80,30,100,0.92));border:1px solid rgba(180,140,240,0.4);transition:all 0.35s;display:grid;grid-template-columns:1fr 1.5fr 1fr;min-height:420px}
-        .d-duo-card::before{content:"";position:absolute;inset:0;border:1px solid transparent;pointer-events:none;transition:all 0.35s;z-index:5}
+        .d-duo-card{position:relative;overflow:hidden;cursor:pointer;background:linear-gradient(135deg,rgba(40,30,80,0.9),rgba(80,30,100,0.9));border:none;transition:all 0.35s;display:grid;grid-template-columns:1fr 1.5fr 1fr;min-height:420px}
         .d-duo-card:hover{transform:translateY(-5px);box-shadow:0 28px 70px rgba(140,100,220,0.5)}
-        .d-duo-card:hover::before{border-color:rgba(220,180,255,0.6);inset:10px}
         .d-duo-bg{position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(180,140,240,0.22),transparent 60%);pointer-events:none}
         .d-duo-img{position:relative;overflow:hidden}
         .d-duo-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.7s}
@@ -201,11 +199,8 @@ export function HomeDesktop({ characters }: Props) {
       `}</style>
 
       <div className="d-bg-stars" />
-      <div className="d-bg-glow1" />
-      <div className="d-bg-glow2" />
-      <div className="d-bg-glow3" />
-      <div className="d-bg-hanja l">命</div>
-      <div className="d-bg-hanja r">月</div>
+      <div className="d-bg-clouds" />
+      <div className="d-bg-clouds2" />
 
       <header className="d-header">
         <div className="d-header-inner">
@@ -233,10 +228,6 @@ export function HomeDesktop({ characters }: Props) {
         <div className="d-hero-bg" />
         <div className="d-hero-overlay" />
         <div className="d-hero-vignette" />
-        <div className="d-hero-corner tl" />
-        <div className="d-hero-corner tr" />
-        <div className="d-hero-corner bl" />
-        <div className="d-hero-corner br" />
         <div className="d-hero-text">
           <div className="d-hero-mark">命 理 天 月</div>
           <div className="d-hero-divider">
@@ -271,9 +262,8 @@ export function HomeDesktop({ characters }: Props) {
           <div className="d-sec-sub">자운 · 월령 · 성연 · 밀서<br/>네 풀이사가 그대의 운명을 함께 풀어드립니다</div>
         </div>
         <div className="d-char-grid">
-          {characters.map((c, i) => (
+          {characters.map((c) => (
             <div key={c.id} className="d-char-card" onClick={() => router.push(`/${c.id}`)}>
-              <div className="d-char-num">{NUMERALS[i]}</div>
               <div className="d-char-img">
                 <img src={c.image} alt={c.name} />
                 <div className="d-char-img-fade" />
