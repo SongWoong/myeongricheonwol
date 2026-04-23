@@ -39,7 +39,7 @@ export function HomeDesktop({ characters }: Props) {
         .d-bg-tint{position:fixed;inset:0;z-index:1;background:linear-gradient(180deg,transparent 0%,transparent 70%,rgba(0,0,0,0.4) 100%);pointer-events:none}
 
         /* ───────── 헤더 바 (불투명 풀와이드) ───────── */
-        .d-header{position:fixed;top:0;left:0;right:0;z-index:100;height:72px;display:flex;align-items:center;background:#0a0612;border-bottom:1px solid rgba(255,255,255,0.1)}
+        .d-header{position:fixed;top:0;left:0;width:100vw;z-index:100;height:72px;display:flex;align-items:center;background:#0a0612;border-bottom:1px solid rgba(255,255,255,0.1)}
         .d-header-inner{width:100%;display:flex;align-items:center;justify-content:space-between;padding:0}
         .d-logo{cursor:pointer;flex-shrink:0;white-space:nowrap;padding-left:40px}
         .d-logo-mark{font-family:'Diphylleia','Noto Serif KR',serif;font-size:22px;color:#fff;letter-spacing:8px;font-weight:500}
