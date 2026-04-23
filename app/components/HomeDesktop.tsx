@@ -61,7 +61,7 @@ export function HomeDesktop({ characters }: Props) {
         .d-hero-inner::before{content:"";position:absolute;inset:-10px -40px;background:radial-gradient(ellipse 80% 90% at 50% 50%,rgba(0,0,0,0.55),transparent 70%);z-index:-1;pointer-events:none}
         .d-hero-tag{font-family:sans-serif;font-size:11px;letter-spacing:8px;color:#fff;margin-bottom:14px;text-shadow:0 2px 12px rgba(0,0,0,1),0 0 20px rgba(0,0,0,0.8)}
         .d-hero-title{font-family:'Noto Serif KR',serif;font-size:42px;color:#fff;line-height:1.35;letter-spacing:5px;margin-bottom:12px;text-shadow:0 4px 20px rgba(0,0,0,1),0 2px 10px rgba(0,0,0,0.9);font-weight:500}
-        .d-hero-title span{color:#b8d4ff;text-shadow:0 4px 20px rgba(0,0,0,1),0 0 30px rgba(140,180,255,0.6)}
+        .d-hero-title span{color:#4070d0;text-shadow:0 4px 20px rgba(0,0,0,1),0 2px 12px rgba(0,0,0,0.9),0 0 30px rgba(80,140,220,0.5)}
         .d-hero-sub{font-family:sans-serif;font-size:14px;color:#fff;letter-spacing:3px;text-shadow:0 2px 12px rgba(0,0,0,1),0 0 16px rgba(0,0,0,0.8);margin-bottom:20px}
         .d-hero-cta{padding:11px 28px;background:rgba(255,255,255,0.1);backdrop-filter:blur(8px);color:#fff;border:1px solid rgba(255,255,255,0.5);font-family:'Noto Serif KR',serif;font-size:13px;letter-spacing:4px;cursor:pointer;transition:all 0.2s}
         .d-hero-cta:hover{background:rgba(255,255,255,0.2);border-color:rgba(255,255,255,0.8);transform:translateY(-2px)}
