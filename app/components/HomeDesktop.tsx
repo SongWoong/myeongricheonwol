@@ -76,16 +76,16 @@ export function HomeDesktop({ characters }: Props) {
           filter:blur(30px);animation:d-clouds-drift2 55s ease-in-out infinite alternate}
         @keyframes d-clouds-drift2{0%{transform:translate(0,0) scale(1)}100%{transform:translate(25px,-20px) scale(1.05)}}
 
-        /* ───────── 헤더 — 투명 풀와이드 ───────── */
-        .d-header{position:fixed;top:0;left:0;right:0;width:100%;z-index:100;background:transparent}
-        .d-header-inner{width:100%;display:flex;align-items:center;justify-content:space-between;padding:28px 60px}
-        .d-logo{cursor:pointer}
-        .d-logo-mark{font-family:'Diphylleia','Noto Serif KR',serif;color:#fff;font-size:28px;letter-spacing:12px;text-shadow:0 2px 16px rgba(0,0,0,0.9),0 0 30px rgba(180,160,255,0.35);font-weight:500;line-height:1}
-        .d-nav{display:flex;align-items:center;gap:36px}
-        .d-nav-item{font-family:'Noto Serif KR',serif;font-size:14px;color:rgba(255,255,255,0.85);cursor:pointer;letter-spacing:3px;transition:color 0.2s;position:relative;padding:6px 0;text-shadow:0 2px 8px rgba(0,0,0,0.9)}
+        /* ───────── 헤더 — 가로 바 ───────── */
+        .d-header{position:fixed;top:0;left:0;right:0;width:100%;z-index:100;background:rgba(4,3,10,0.55);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(180,160,255,0.1);height:68px;display:flex;align-items:center}
+        .d-header-inner{width:100%;display:flex;align-items:center;padding:0 48px;gap:40px;white-space:nowrap}
+        .d-logo{cursor:pointer;flex:0 0 auto;min-width:160px}
+        .d-logo-mark{font-family:'Diphylleia','Noto Serif KR',serif;color:#fff;font-size:22px;letter-spacing:8px;font-weight:500;line-height:1;white-space:nowrap}
+        .d-nav{flex:1;display:flex;align-items:center;justify-content:center;gap:32px;white-space:nowrap}
+        .d-nav-item{font-family:'Noto Serif KR',serif;font-size:14px;color:rgba(255,255,255,0.8);cursor:pointer;letter-spacing:2px;transition:color 0.2s;position:relative;padding:4px 0;white-space:nowrap}
         .d-nav-item:hover{color:#fff}
-        .d-nav-item:hover::after{content:"";position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);width:24px;height:1px;background:linear-gradient(to right,transparent,rgba(220,200,255,0.8),transparent)}
-        .d-login{padding:11px 28px;font-size:13px;border:1px solid rgba(255,255,255,0.5);color:#fff;border-radius:1px;background:rgba(0,0,0,0.15);cursor:pointer;font-family:'Noto Serif KR',serif;letter-spacing:4px;transition:all 0.2s;position:relative;overflow:hidden;backdrop-filter:blur(6px);text-shadow:0 2px 8px rgba(0,0,0,0.7)}
+        .d-nav-item:hover::after{content:"";position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);width:20px;height:1px;background:rgba(220,200,255,0.8)}
+        .d-login{flex:0 0 auto;padding:9px 22px;font-size:13px;border:1px solid rgba(255,255,255,0.35);color:#fff;border-radius:2px;background:transparent;cursor:pointer;font-family:'Noto Serif KR',serif;letter-spacing:3px;transition:all 0.2s;white-space:nowrap}
         .d-login::before{content:"";position:absolute;inset:0;background:linear-gradient(to right,rgba(180,160,255,0.15),transparent);opacity:0;transition:opacity 0.3s}
         .d-login:hover{border-color:rgba(220,200,255,0.8);color:#fff}
         .d-login:hover::before{opacity:1}
