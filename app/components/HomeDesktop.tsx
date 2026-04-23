@@ -42,6 +42,22 @@ export function HomeDesktop({ characters }: Props) {
           radial-gradient(ellipse 60% 40% at 50% 35%,rgba(0,0,0,0.25),transparent 60%);
           pointer-events:none}
 
+        /* 별똥별 효과 */
+        .d-shooting-stars{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+        .d-shooting-star{position:absolute;width:2px;height:2px;background:linear-gradient(-45deg,#fff,rgba(255,255,255,0));border-radius:50%;filter:drop-shadow(0 0 6px #fff);animation:d-shoot 6s linear infinite;opacity:0}
+        .d-shooting-star::before{content:"";position:absolute;top:50%;transform:translateY(-50%);width:100px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.9),transparent);right:0}
+        @keyframes d-shoot{
+          0%{transform:translate(0,0) rotate(215deg);opacity:0}
+          5%{opacity:1}
+          60%{opacity:1}
+          100%{transform:translate(-900px,900px) rotate(215deg);opacity:0}
+        }
+        .d-shooting-star.s1{top:10%;left:85%;animation-delay:0s}
+        .d-shooting-star.s2{top:5%;left:70%;animation-delay:3s;animation-duration:5s}
+        .d-shooting-star.s3{top:20%;left:95%;animation-delay:6s;animation-duration:7s}
+        .d-shooting-star.s4{top:30%;left:80%;animation-delay:9s;animation-duration:5.5s}
+        .d-shooting-star.s5{top:15%;left:60%;animation-delay:12s;animation-duration:6s}
+
         /* ───────── 헤더 바 (반투명 풀와이드) ───────── */
         .d-header{position:fixed;top:0;left:0;width:100vw;z-index:100;height:72px;display:flex;align-items:center;background:rgba(10,6,18,0.5);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,0.08)}
         .d-header-inner{width:100%;display:flex;align-items:center;justify-content:space-between;padding:0}
@@ -61,7 +77,7 @@ export function HomeDesktop({ characters }: Props) {
         .d-hero-inner::before{content:"";position:absolute;inset:-10px -40px;background:radial-gradient(ellipse 80% 90% at 50% 50%,rgba(0,0,0,0.55),transparent 70%);z-index:-1;pointer-events:none}
         .d-hero-tag{font-family:sans-serif;font-size:11px;letter-spacing:8px;color:#fff;margin-bottom:14px;text-shadow:0 2px 12px rgba(0,0,0,1),0 0 20px rgba(0,0,0,0.8)}
         .d-hero-title{font-family:'Noto Serif KR',serif;font-size:42px;color:#fff;line-height:1.35;letter-spacing:5px;margin-bottom:12px;text-shadow:0 4px 20px rgba(0,0,0,1),0 2px 10px rgba(0,0,0,0.9);font-weight:500}
-        .d-hero-title span{color:#4070d0;text-shadow:0 4px 20px rgba(0,0,0,1),0 2px 12px rgba(0,0,0,0.9),0 0 30px rgba(80,140,220,0.5)}
+        .d-hero-title span{color:#2060e0;text-shadow:0 4px 20px rgba(0,0,0,1),0 2px 12px rgba(0,0,0,0.9),0 0 40px rgba(60,120,240,0.6)}
         .d-hero-sub{font-family:sans-serif;font-size:14px;color:#fff;letter-spacing:3px;text-shadow:0 2px 12px rgba(0,0,0,1),0 0 16px rgba(0,0,0,0.8);margin-bottom:20px}
         .d-hero-cta{padding:11px 28px;background:rgba(255,255,255,0.1);backdrop-filter:blur(8px);color:#fff;border:1px solid rgba(255,255,255,0.5);font-family:'Noto Serif KR',serif;font-size:13px;letter-spacing:4px;cursor:pointer;transition:all 0.2s}
         .d-hero-cta:hover{background:rgba(255,255,255,0.2);border-color:rgba(255,255,255,0.8);transform:translateY(-2px)}
@@ -118,6 +134,13 @@ export function HomeDesktop({ characters }: Props) {
 
       <div className="d-bg"><img src="/bg.png" alt="" /></div>
       <div className="d-bg-tint" />
+      <div className="d-shooting-stars">
+        <span className="d-shooting-star s1" />
+        <span className="d-shooting-star s2" />
+        <span className="d-shooting-star s3" />
+        <span className="d-shooting-star s4" />
+        <span className="d-shooting-star s5" />
+      </div>
 
       <header className="d-header">
         <div className="d-header-inner">
