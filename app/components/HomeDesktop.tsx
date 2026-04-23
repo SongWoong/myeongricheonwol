@@ -70,7 +70,7 @@ export function HomeDesktop({ characters }: Props) {
         .d-char-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
         .d-char-card{position:relative;cursor:pointer;overflow:hidden;background:rgba(0,0,0,0.35);backdrop-filter:blur(8px);transition:all 0.3s}
         .d-char-card:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,0,0,0.5)}
-        .d-char-img{position:relative;aspect-ratio:3/4;overflow:hidden;max-height:360px}
+        .d-char-img{position:relative;aspect-ratio:3/4;overflow:hidden;width:100%}
         .d-char-img img{width:100%;height:100%;object-fit:cover;object-position:top;display:block;transition:transform 0.5s}
         .d-char-card:hover .d-char-img img{transform:scale(1.05)}
         .d-char-img-fade{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 55%,rgba(0,0,0,0.95));pointer-events:none}
