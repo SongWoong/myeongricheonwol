@@ -25,9 +25,10 @@ export function HomeDesktop({ characters }: Props) {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;700&family=Cinzel:wght@400;500&family=Diphylleia&display=swap');
 
-        /* 데스크톱 뷰일 때 body의 검정 배경 제거 */
+        /* 데스크톱 뷰 전역 override — 모바일 컴포넌트가 body를 flex로 만드는 것 차단 */
         @media (min-width:768px){
-          html,body{background:transparent !important}
+          html,body{background:transparent !important;display:block !important;justify-content:initial !important}
+          body>div{width:100% !important}
         }
 
         .d-app{width:100%;min-height:100dvh;color:#fff;font-family:'Noto Serif KR',serif;position:relative;background:transparent}
