@@ -76,16 +76,17 @@ export function HomeDesktop({ characters }: Props) {
           filter:blur(30px);animation:d-clouds-drift2 55s ease-in-out infinite alternate}
         @keyframes d-clouds-drift2{0%{transform:translate(0,0) scale(1)}100%{transform:translate(25px,-20px) scale(1.05)}}
 
-        /* ───────── 헤더 — 가로 바 ───────── */
-        .d-header{position:fixed;top:0;left:0;right:0;width:100%;z-index:100;background:rgba(4,3,10,0.55);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(180,160,255,0.1);height:68px;display:flex;align-items:center}
-        .d-header-inner{width:100%;display:flex;align-items:center;padding:0 48px;gap:40px;white-space:nowrap}
-        .d-logo{cursor:pointer;flex:0 0 auto;min-width:160px}
-        .d-logo-mark{font-family:'Diphylleia','Noto Serif KR',serif;color:#fff;font-size:22px;letter-spacing:8px;font-weight:500;line-height:1;white-space:nowrap}
-        .d-nav{flex:1;display:flex;align-items:center;justify-content:center;gap:32px;white-space:nowrap}
-        .d-nav-item{font-family:'Noto Serif KR',serif;font-size:14px;color:rgba(255,255,255,0.8);cursor:pointer;letter-spacing:2px;transition:color 0.2s;position:relative;padding:4px 0;white-space:nowrap}
+        /* ───────── 헤더 — 풀와이드 가로 바 ───────── */
+        .d-header{position:fixed;top:0;left:0;right:0;width:100%;z-index:100;background:rgba(4,3,10,0.55);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(180,160,255,0.12);height:72px;display:flex;align-items:center}
+        .d-header-inner{width:100%;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 56px;gap:48px;white-space:nowrap}
+        .d-logo{cursor:pointer;justify-self:start}
+        .d-logo-mark{font-family:'Diphylleia','Noto Serif KR',serif;color:#fff;font-size:24px;letter-spacing:8px;font-weight:500;line-height:1;white-space:nowrap;text-shadow:0 0 14px rgba(180,160,255,0.25)}
+        .d-nav{display:flex;align-items:center;justify-content:center;gap:36px;white-space:nowrap;justify-self:center}
+        .d-nav-item{font-family:'Noto Serif KR',serif;font-size:14px;color:rgba(255,255,255,0.82);cursor:pointer;letter-spacing:3px;transition:color 0.2s;position:relative;padding:6px 0;white-space:nowrap}
         .d-nav-item:hover{color:#fff}
         .d-nav-item:hover::after{content:"";position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);width:20px;height:1px;background:rgba(220,200,255,0.8)}
-        .d-login{flex:0 0 auto;padding:9px 22px;font-size:13px;border:1px solid rgba(255,255,255,0.35);color:#fff;border-radius:2px;background:transparent;cursor:pointer;font-family:'Noto Serif KR',serif;letter-spacing:3px;transition:all 0.2s;white-space:nowrap}
+        .d-login{padding:10px 26px;font-size:13px;border:1px solid rgba(255,255,255,0.4);color:#fff;border-radius:2px;background:transparent;cursor:pointer;font-family:'Noto Serif KR',serif;letter-spacing:3px;transition:all 0.2s;white-space:nowrap;justify-self:end}
+        .d-login:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.7)}
         .d-login::before{content:"";position:absolute;inset:0;background:linear-gradient(to right,rgba(180,160,255,0.15),transparent);opacity:0;transition:opacity 0.3s}
         .d-login:hover{border-color:rgba(220,200,255,0.8);color:#fff}
         .d-login:hover::before{opacity:1}
