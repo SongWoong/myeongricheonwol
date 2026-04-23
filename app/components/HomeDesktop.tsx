@@ -25,7 +25,10 @@ export function HomeDesktop({ characters }: Props) {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;700&family=Cinzel:wght@400;500;600&family=Diphylleia&family=Cormorant+Garamond:wght@300;400;500&display=swap');
 
-        .d-app{width:100%;min-height:100dvh;background:#04030a;color:#e0e6ff;font-family:'Noto Serif KR',serif;position:relative;overflow-x:hidden}
+        .d-app{width:100%;min-height:100dvh;color:#e0e6ff;font-family:'Noto Serif KR',serif;position:relative;overflow-x:hidden;background:#04030a}
+        /* 브라우저 전체 배경 = 달 이미지 (고정, 풀블리드) */
+        .d-page-bg{position:fixed;inset:0;z-index:0;background:url('/bg.png') center top/cover no-repeat;pointer-events:none}
+        .d-page-bg-overlay{position:fixed;inset:0;z-index:0;background:linear-gradient(180deg,rgba(4,3,10,0.25) 0%,rgba(4,3,10,0.45) 40%,rgba(4,3,10,0.85) 80%,rgba(4,3,10,0.95) 100%);pointer-events:none}
 
         /* ───────── 배경 — 구름 + 별빛 (전체 페이지) ───────── */
         .d-bg-stars{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:
@@ -74,9 +77,9 @@ export function HomeDesktop({ characters }: Props) {
           filter:blur(30px);animation:d-clouds-drift2 55s ease-in-out infinite alternate}
         @keyframes d-clouds-drift2{0%{transform:translate(0,0) scale(1)}100%{transform:translate(25px,-20px) scale(1.05)}}
 
-        /* ───────── 헤더 ───────── */
-        .d-header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(4,3,10,0.6);backdrop-filter:blur(24px);border-bottom:1px solid rgba(140,120,220,0.1)}
-        .d-header-inner{max-width:1600px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:22px 60px}
+        /* ───────── 헤더 — 풀와이드 바 ───────── */
+        .d-header{position:fixed;top:0;left:0;right:0;width:100%;z-index:100;background:linear-gradient(180deg,rgba(4,3,10,0.85) 0%,rgba(4,3,10,0.7) 100%);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(140,120,220,0.15);box-shadow:0 4px 30px rgba(0,0,0,0.3)}
+        .d-header-inner{max-width:1600px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:20px 60px}
         .d-logo{display:flex;align-items:center;gap:14px;cursor:pointer}
         .d-logo-mark{font-family:'Diphylleia','Noto Serif KR',serif;color:#fff;font-size:34px;letter-spacing:10px;text-shadow:0 0 30px rgba(180,160,255,0.55);font-weight:500;line-height:1}
         .d-logo-meta{display:flex;flex-direction:column;border-left:1px solid rgba(180,160,255,0.25);padding-left:14px}
@@ -91,12 +94,9 @@ export function HomeDesktop({ characters }: Props) {
         .d-login:hover{border-color:rgba(220,200,255,0.8);color:#fff}
         .d-login:hover::before{opacity:1}
 
-        /* ───────── 풀스크린 히어로 ───────── */
-        .d-hero{position:relative;width:100%;height:100vh;min-height:760px;display:flex;align-items:center;justify-content:center;z-index:2;overflow:hidden}
-        .d-hero-bg{position:absolute;inset:0;background:url('/bg.png') center/cover no-repeat;z-index:1;animation:d-bg-zoom 30s ease-in-out infinite alternate}
-        @keyframes d-bg-zoom{0%{transform:scale(1)}100%{transform:scale(1.08)}}
-        .d-hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,3,10,0.55) 0%,rgba(4,3,10,0.3) 35%,rgba(4,3,10,0.55) 65%,rgba(4,3,10,0.95) 100%);z-index:2}
-        .d-hero-vignette{position:absolute;inset:0;background:radial-gradient(ellipse 70% 80% at 50% 50%,transparent,rgba(4,3,10,0.6));z-index:2;pointer-events:none}
+        /* ───────── 히어로 (배경은 페이지 전체에서 상속) ───────── */
+        .d-hero{position:relative;width:100%;height:100vh;min-height:760px;display:flex;align-items:center;justify-content:center;z-index:2}
+        .d-hero-vignette{position:absolute;inset:0;background:radial-gradient(ellipse 70% 80% at 50% 45%,transparent 30%,rgba(4,3,10,0.5));z-index:2;pointer-events:none}
 
         /* (히어로 코너 액자 제거됨) */
 
@@ -198,6 +198,8 @@ export function HomeDesktop({ characters }: Props) {
         .d-footer-links span:hover{color:#c0a8e8}
       `}</style>
 
+      <div className="d-page-bg" />
+      <div className="d-page-bg-overlay" />
       <div className="d-bg-stars" />
       <div className="d-bg-clouds" />
       <div className="d-bg-clouds2" />
@@ -225,8 +227,6 @@ export function HomeDesktop({ characters }: Props) {
       </header>
 
       <section className="d-hero">
-        <div className="d-hero-bg" />
-        <div className="d-hero-overlay" />
         <div className="d-hero-vignette" />
         <div className="d-hero-text">
           <div className="d-hero-mark">命 理 天 月</div>
