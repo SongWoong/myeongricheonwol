@@ -52,29 +52,6 @@ body::-webkit-scrollbar-thumb:hover,
 }
 
 /* ─────────────────────────────────────
-   반응형 — 태블릿/데스크톱
-   ───────────────────────────────────── */
-@media (min-width: 768px) {
-  .app {
-    max-width: 720px !important;
-  }
-  /* 헤더도 같이 넓힘 */
-  header {
-    max-width: 720px !important;
-  }
-  .bnav {
-    max-width: 720px !important;
-  }
-}
-@media (min-width: 1100px) {
-  .app {
-    max-width: 880px !important;
-  }
-  header { max-width: 880px !important; }
-  .bnav { max-width: 880px !important; }
-}
-
-/* ─────────────────────────────────────
    데스크톱 배경 — 모바일 뷰 양옆 채우기
    ───────────────────────────────────── */
 @media (min-width: 600px) {

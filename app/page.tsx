@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { HomeDesktop } from "@/app/components/HomeDesktop";
 export default function Home() {
   const [activeTab, setActiveTab] = useState("home");
   const router = useRouter();
@@ -18,16 +17,7 @@ export default function Home() {
     { id: "tojeong", icon: "📜", label: "토정비결", free: true, path: "/tojeong" },
     { id: "replay", icon: "📦", label: "보관함", free: true, path: "/replay" },
   ];
-  return (
-    <>
-      <style>{`
-        @media (min-width:768px){.mobile-home{display:none !important}}
-        @media (max-width:767px){.desktop-home{display:none !important}}
-      `}</style>
-      <div className="desktop-home"><HomeDesktop characters={characters} /></div>
-      <div className="mobile-home"><MobileHome characters={characters} tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} router={router} /></div>
-    </>
-  );
+  return <MobileHome characters={characters} tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} router={router} />;
 }
 
 function MobileHome({ characters, tabs, activeTab, setActiveTab, router }: {
@@ -64,11 +54,6 @@ function MobileHome({ characters, tabs, activeTab, setActiveTab, router }: {
         .sec-tag{font-family:sans-serif;font-size:10px;color:#6a8abc;letter-spacing:5px;margin-bottom:6px;text-align:center}
         .sec-title{font-size:15px;color:#a0b8dc;font-weight:400;letter-spacing:1px;text-align:center;margin-bottom:18px}
         .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-        @media (min-width:768px){.grid{grid-template-columns:1fr 1fr 1fr 1fr;gap:14px}}
-        @media (min-width:768px){.hero{height:380px}.hero-h1{font-size:34px}.hero-sub{font-size:13px}}
-        @media (min-width:768px){.section{padding:32px 24px}.sec-title{font-size:18px}}
-        @media (min-width:768px){.duo-img-wrap{height:280px}.duo-name{font-size:24px}.duo-desc-line{font-size:13px}}
-        @media (min-width:768px){.cname{font-size:18px}.crole{font-size:11px}.cdesc{font-size:11.5px}}
         .card{border-radius:12px;overflow:hidden;cursor:pointer;transition:transform 0.2s}
         .card:hover{transform:scale(1.02)}.card:active{transform:scale(0.98)}
         .img-wrap{position:relative;aspect-ratio:3/4}
