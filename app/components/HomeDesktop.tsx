@@ -1,5 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
+import { useSession, signOut } from "next-auth/react";
 
 interface CharacterDef {
   id: string;
@@ -19,6 +20,7 @@ interface Props {
 
 export function HomeDesktop({ characters }: Props) {
   const router = useRouter();
+  const { data: session } = useSession();
 
   return (
     <div className="d-app">
@@ -140,7 +142,15 @@ export function HomeDesktop({ characters }: Props) {
             <span className="d-nav-item" onClick={() => router.push("/today")}>오늘운세</span>
             <span className="d-nav-item" onClick={() => router.push("/tojeong")}>토정비결</span>
           </nav>
-          <div className="d-login-wrap"><button className="d-login">로그인</button></div>
+          <div className="d-login-wrap">
+            {session?.user ? (
+              <button className="d-login" onClick={() => signOut({ callbackUrl: "/" })}>
+                {(session.user as { nickname?: string }).nickname || session.user.name || "로그아웃"}
+              </button>
+            ) : (
+              <button className="d-login" onClick={() => router.push("/login")}>로그인</button>
+            )}
+          </div>
         </div>
       </header>
 
