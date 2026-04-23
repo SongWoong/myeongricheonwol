@@ -28,7 +28,6 @@ export function HomeDesktop({ characters }: Props) {
         .d-app{width:100%;min-height:100dvh;color:#e0e6ff;font-family:'Noto Serif KR',serif;position:relative;overflow-x:hidden;background:#04030a}
         /* 브라우저 전체 배경 = 달 이미지 (고정, 풀블리드) */
         .d-page-bg{position:fixed;inset:0;z-index:0;background:url('/bg.png') center top/cover no-repeat;pointer-events:none}
-        .d-page-bg-overlay{position:fixed;inset:0;z-index:0;background:linear-gradient(180deg,rgba(4,3,10,0.25) 0%,rgba(4,3,10,0.45) 40%,rgba(4,3,10,0.85) 80%,rgba(4,3,10,0.95) 100%);pointer-events:none}
 
         /* ───────── 배경 — 구름 + 별빛 (전체 페이지) ───────── */
         .d-bg-stars{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:
@@ -77,19 +76,16 @@ export function HomeDesktop({ characters }: Props) {
           filter:blur(30px);animation:d-clouds-drift2 55s ease-in-out infinite alternate}
         @keyframes d-clouds-drift2{0%{transform:translate(0,0) scale(1)}100%{transform:translate(25px,-20px) scale(1.05)}}
 
-        /* ───────── 헤더 — 풀와이드 바 ───────── */
-        .d-header{position:fixed;top:0;left:0;right:0;width:100%;z-index:100;background:linear-gradient(180deg,rgba(4,3,10,0.85) 0%,rgba(4,3,10,0.7) 100%);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(140,120,220,0.15);box-shadow:0 4px 30px rgba(0,0,0,0.3)}
-        .d-header-inner{max-width:1600px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:20px 60px}
-        .d-logo{display:flex;align-items:center;gap:14px;cursor:pointer}
-        .d-logo-mark{font-family:'Diphylleia','Noto Serif KR',serif;color:#fff;font-size:34px;letter-spacing:10px;text-shadow:0 0 30px rgba(180,160,255,0.55);font-weight:500;line-height:1}
-        .d-logo-meta{display:flex;flex-direction:column;border-left:1px solid rgba(180,160,255,0.25);padding-left:14px}
-        .d-logo-ko{font-family:'Noto Serif KR',serif;font-size:13px;color:rgba(255,255,255,0.85);letter-spacing:5px;line-height:1.3}
-        .d-logo-en{font-family:'Cinzel',sans-serif;font-size:8.5px;color:rgba(255,255,255,0.4);letter-spacing:4px;margin-top:3px}
+        /* ───────── 헤더 — 투명 풀와이드 ───────── */
+        .d-header{position:fixed;top:0;left:0;right:0;width:100%;z-index:100;background:transparent}
+        .d-header-inner{width:100%;display:flex;align-items:center;justify-content:space-between;padding:28px 60px}
+        .d-logo{cursor:pointer}
+        .d-logo-mark{font-family:'Diphylleia','Noto Serif KR',serif;color:#fff;font-size:28px;letter-spacing:12px;text-shadow:0 2px 16px rgba(0,0,0,0.9),0 0 30px rgba(180,160,255,0.35);font-weight:500;line-height:1}
         .d-nav{display:flex;align-items:center;gap:36px}
-        .d-nav-item{font-family:'Noto Serif KR',serif;font-size:14px;color:rgba(255,255,255,0.72);cursor:pointer;letter-spacing:3px;transition:color 0.2s;position:relative;padding:6px 0}
+        .d-nav-item{font-family:'Noto Serif KR',serif;font-size:14px;color:rgba(255,255,255,0.85);cursor:pointer;letter-spacing:3px;transition:color 0.2s;position:relative;padding:6px 0;text-shadow:0 2px 8px rgba(0,0,0,0.9)}
         .d-nav-item:hover{color:#fff}
         .d-nav-item:hover::after{content:"";position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);width:24px;height:1px;background:linear-gradient(to right,transparent,rgba(220,200,255,0.8),transparent)}
-        .d-login{padding:11px 28px;font-size:13px;border:1px solid rgba(180,160,255,0.45);color:rgba(255,255,255,0.9);border-radius:1px;background:transparent;cursor:pointer;font-family:'Noto Serif KR',serif;letter-spacing:4px;transition:all 0.2s;position:relative;overflow:hidden}
+        .d-login{padding:11px 28px;font-size:13px;border:1px solid rgba(255,255,255,0.5);color:#fff;border-radius:1px;background:rgba(0,0,0,0.15);cursor:pointer;font-family:'Noto Serif KR',serif;letter-spacing:4px;transition:all 0.2s;position:relative;overflow:hidden;backdrop-filter:blur(6px);text-shadow:0 2px 8px rgba(0,0,0,0.7)}
         .d-login::before{content:"";position:absolute;inset:0;background:linear-gradient(to right,rgba(180,160,255,0.15),transparent);opacity:0;transition:opacity 0.3s}
         .d-login:hover{border-color:rgba(220,200,255,0.8);color:#fff}
         .d-login:hover::before{opacity:1}
@@ -199,7 +195,6 @@ export function HomeDesktop({ characters }: Props) {
       `}</style>
 
       <div className="d-page-bg" />
-      <div className="d-page-bg-overlay" />
       <div className="d-bg-stars" />
       <div className="d-bg-clouds" />
       <div className="d-bg-clouds2" />
@@ -208,10 +203,6 @@ export function HomeDesktop({ characters }: Props) {
         <div className="d-header-inner">
           <div className="d-logo" onClick={() => router.push("/")}>
             <div className="d-logo-mark">命理天月</div>
-            <div className="d-logo-meta">
-              <div className="d-logo-ko">명리천월</div>
-              <div className="d-logo-en">MYEONGRICHEONWOL</div>
-            </div>
           </div>
           <nav className="d-nav">
             <span className="d-nav-item" onClick={() => router.push("/saju")}>사주</span>
