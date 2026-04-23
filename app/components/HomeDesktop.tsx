@@ -137,7 +137,6 @@ export function HomeDesktop({ characters }: Props) {
           <div className="d-hero-tag">SAJU · TAROT · ZIWEI · DUO</div>
           <h1 className="d-hero-title">당신의 운명을<br/><span>하늘이 말해줍니다</span></h1>
           <p className="d-hero-sub">네 풀이사가 함께하는 운명 상담</p>
-          <button className="d-hero-cta" onClick={() => router.push("/saju")}>풀이 시작하기 →</button>
         </div>
       </section>
 

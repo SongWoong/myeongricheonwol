@@ -27,39 +27,9 @@ export default function Home() {
   ];
   // 서버/초기 렌더 = null 상태: 빈 화면. 클라이언트에서 결정 후 하나만 렌더.
   if (isDesktop === null) return <div style={{background:"#060410",minHeight:"100dvh"}}/>;
-  return (
-    <>
-      <ViewportIndicator />
-      {isDesktop
-        ? <HomeDesktop characters={characters} />
-        : <MobileHome characters={characters} tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} router={router} />}
-    </>
-  );
-}
-
-function ViewportIndicator() {
-  const [size, setSize] = useState({ w: 0, h: 0 });
-  useEffect(() => {
-    const update = () => setSize({ w: window.innerWidth, h: window.innerHeight });
-    update();
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
-  }, []);
-  if (!size.w) return null;
-  return (
-    <div style={{
-      position: "fixed", bottom: 8, right: 8, zIndex: 9999,
-      padding: "6px 12px",
-      background: "rgba(0,0,0,0.8)",
-      color: size.w >= 768 ? "#80ff80" : "#ff80c0",
-      fontFamily: "monospace", fontSize: 12,
-      border: "1px solid rgba(255,255,255,0.3)",
-      borderRadius: 4,
-      pointerEvents: "none",
-    }}>
-      {size.w} × {size.h} px · {size.w >= 768 ? "DESKTOP" : "MOBILE"}
-    </div>
-  );
+  return isDesktop
+    ? <HomeDesktop characters={characters} />
+    : <MobileHome characters={characters} tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} router={router} />;
 }
 
 function MobileHome({ characters, tabs, activeTab, setActiveTab, router }: {
