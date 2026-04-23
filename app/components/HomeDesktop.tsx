@@ -74,7 +74,6 @@ export function HomeDesktop({ characters }: Props) {
         /* ───────── 히어로 (압축 — 한 화면 안) ───────── */
         .d-hero{position:relative;z-index:2;padding:110px 60px 24px;text-align:center}
         .d-hero-inner{position:relative;display:inline-block;padding:14px 36px}
-        .d-hero-inner::before{content:"";position:absolute;inset:-10px -40px;background:radial-gradient(ellipse 80% 90% at 50% 50%,rgba(0,0,0,0.55),transparent 70%);z-index:-1;pointer-events:none}
         .d-hero-tag{font-family:sans-serif;font-size:11px;letter-spacing:8px;color:#fff;margin-bottom:14px;text-shadow:0 2px 12px rgba(0,0,0,1),0 0 20px rgba(0,0,0,0.8)}
         .d-hero-title{font-family:'Noto Serif KR',serif;font-size:42px;color:#fff;line-height:1.35;letter-spacing:5px;margin-bottom:12px;text-shadow:0 4px 20px rgba(0,0,0,1),0 2px 10px rgba(0,0,0,0.9);font-weight:500}
         .d-hero-title span{color:#2060e0;text-shadow:0 4px 20px rgba(0,0,0,1),0 2px 12px rgba(0,0,0,0.9),0 0 40px rgba(60,120,240,0.6)}
