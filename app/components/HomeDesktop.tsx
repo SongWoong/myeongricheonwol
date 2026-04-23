@@ -36,8 +36,11 @@ export function HomeDesktop({ characters }: Props) {
         /* 브라우저 전체 = 달빛 배경만 */
         .d-bg{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
         .d-bg img{width:100%;height:100%;object-fit:cover;display:block}
-        /* 최하단만 살짝 어둡게 */
-        .d-bg-tint{position:fixed;inset:0;z-index:1;background:linear-gradient(180deg,transparent 0%,transparent 70%,rgba(0,0,0,0.4) 100%);pointer-events:none}
+        /* 가독성 레이어 — 전체 살짝 어둡게 + 하단 추가 */
+        .d-bg-tint{position:fixed;inset:0;z-index:1;background:
+          linear-gradient(180deg,rgba(0,0,0,0.2) 0%,rgba(0,0,0,0.15) 40%,rgba(0,0,0,0.55) 100%),
+          radial-gradient(ellipse 60% 40% at 50% 35%,rgba(0,0,0,0.25),transparent 60%);
+          pointer-events:none}
 
         /* ───────── 헤더 바 (반투명 풀와이드) ───────── */
         .d-header{position:fixed;top:0;left:0;width:100vw;z-index:100;height:72px;display:flex;align-items:center;background:rgba(10,6,18,0.5);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,0.08)}
@@ -54,10 +57,12 @@ export function HomeDesktop({ characters }: Props) {
 
         /* ───────── 히어로 (압축 — 한 화면 안) ───────── */
         .d-hero{position:relative;z-index:2;padding:110px 60px 24px;text-align:center}
-        .d-hero-tag{font-family:sans-serif;font-size:11px;letter-spacing:8px;color:rgba(255,255,255,0.85);margin-bottom:14px;text-shadow:0 2px 10px rgba(0,0,0,0.9)}
-        .d-hero-title{font-family:'Noto Serif KR',serif;font-size:42px;color:#fff;line-height:1.35;letter-spacing:5px;margin-bottom:12px;text-shadow:0 4px 30px rgba(0,0,0,0.95);font-weight:500}
-        .d-hero-title span{color:#a8c8ff;text-shadow:0 4px 30px rgba(0,0,0,0.95),0 0 30px rgba(140,180,255,0.6)}
-        .d-hero-sub{font-family:sans-serif;font-size:14px;color:rgba(255,255,255,0.85);letter-spacing:3px;text-shadow:0 2px 10px rgba(0,0,0,0.95);margin-bottom:20px}
+        .d-hero-inner{position:relative;display:inline-block;padding:14px 36px}
+        .d-hero-inner::before{content:"";position:absolute;inset:-10px -40px;background:radial-gradient(ellipse 80% 90% at 50% 50%,rgba(0,0,0,0.55),transparent 70%);z-index:-1;pointer-events:none}
+        .d-hero-tag{font-family:sans-serif;font-size:11px;letter-spacing:8px;color:#fff;margin-bottom:14px;text-shadow:0 2px 12px rgba(0,0,0,1),0 0 20px rgba(0,0,0,0.8)}
+        .d-hero-title{font-family:'Noto Serif KR',serif;font-size:42px;color:#fff;line-height:1.35;letter-spacing:5px;margin-bottom:12px;text-shadow:0 4px 20px rgba(0,0,0,1),0 2px 10px rgba(0,0,0,0.9);font-weight:500}
+        .d-hero-title span{color:#b8d4ff;text-shadow:0 4px 20px rgba(0,0,0,1),0 0 30px rgba(140,180,255,0.6)}
+        .d-hero-sub{font-family:sans-serif;font-size:14px;color:#fff;letter-spacing:3px;text-shadow:0 2px 12px rgba(0,0,0,1),0 0 16px rgba(0,0,0,0.8);margin-bottom:20px}
         .d-hero-cta{padding:11px 28px;background:rgba(255,255,255,0.1);backdrop-filter:blur(8px);color:#fff;border:1px solid rgba(255,255,255,0.5);font-family:'Noto Serif KR',serif;font-size:13px;letter-spacing:4px;cursor:pointer;transition:all 0.2s}
         .d-hero-cta:hover{background:rgba(255,255,255,0.2);border-color:rgba(255,255,255,0.8);transform:translateY(-2px)}
 
@@ -133,7 +138,7 @@ export function HomeDesktop({ characters }: Props) {
       </header>
 
       <section className="d-hero">
-        <div>
+        <div className="d-hero-inner">
           <div className="d-hero-tag">SAJU · TAROT · ZIWEI · DUO</div>
           <h1 className="d-hero-title">당신의 운명을<br/><span>하늘이 말해줍니다</span></h1>
           <p className="d-hero-sub">네 풀이사가 함께하는 운명 상담</p>
