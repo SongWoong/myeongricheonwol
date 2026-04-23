@@ -39,8 +39,8 @@ export function HomeDesktop({ characters }: Props) {
         /* 최하단만 살짝 어둡게 */
         .d-bg-tint{position:fixed;inset:0;z-index:1;background:linear-gradient(180deg,transparent 0%,transparent 70%,rgba(0,0,0,0.4) 100%);pointer-events:none}
 
-        /* ───────── 헤더 바 (불투명 풀와이드) ───────── */
-        .d-header{position:fixed;top:0;left:0;width:100vw;z-index:100;height:72px;display:flex;align-items:center;background:#0a0612;border-bottom:1px solid rgba(255,255,255,0.1)}
+        /* ───────── 헤더 바 (반투명 풀와이드) ───────── */
+        .d-header{position:fixed;top:0;left:0;width:100vw;z-index:100;height:72px;display:flex;align-items:center;background:rgba(10,6,18,0.5);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,0.08)}
         .d-header-inner{width:100%;display:flex;align-items:center;justify-content:space-between;padding:0}
         .d-logo{cursor:pointer;flex-shrink:0;white-space:nowrap;padding-left:40px}
         .d-logo-mark{font-family:'Diphylleia','Noto Serif KR',serif;font-size:22px;color:#fff;letter-spacing:8px;font-weight:500}
@@ -63,8 +63,8 @@ export function HomeDesktop({ characters }: Props) {
 
         /* ───────── 섹션 (패딩 축소) ───────── */
         .d-section{position:relative;z-index:2;max-width:1400px;margin:0 auto;padding:20px 60px 40px}
-        .d-sec-tag{font-family:sans-serif;font-size:11px;letter-spacing:6px;color:rgba(255,255,255,0.7);text-align:center;margin-bottom:6px;text-shadow:0 2px 10px rgba(0,0,0,0.9)}
-        .d-sec-title{font-family:'Noto Serif KR',serif;font-size:22px;color:#fff;text-align:center;letter-spacing:4px;margin-bottom:24px;font-weight:500;text-shadow:0 2px 16px rgba(0,0,0,0.9)}
+        .d-sec-tag{font-family:sans-serif;font-size:11px;letter-spacing:6px;color:rgba(255,255,255,0.85);text-align:center;margin-bottom:6px;text-shadow:0 2px 10px rgba(0,0,0,0.95),0 0 20px rgba(0,0,0,0.7)}
+        .d-sec-title{font-family:'Noto Serif KR',serif;font-size:22px;color:#fff;text-align:center;letter-spacing:4px;margin-bottom:24px;font-weight:500;text-shadow:0 2px 16px rgba(0,0,0,0.95),0 0 30px rgba(0,0,0,0.8)}
 
         /* ───────── 캐릭터 4명 한 줄 (컴팩트) ───────── */
         .d-char-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
@@ -83,6 +83,24 @@ export function HomeDesktop({ characters }: Props) {
         .d-char-tag{font-family:sans-serif;font-size:10px;padding:4px 10px;display:inline-block;letter-spacing:2px}
         .d-tag-free{background:rgba(60,120,200,0.3);color:#a8d0ff;border:1px solid rgba(100,160,240,0.5)}
         .d-tag-adult{background:rgba(180,50,90,0.3);color:#ff9ab0;border:1px solid rgba(200,80,120,0.5)}
+
+        /* ───────── 듀오 섹션 ───────── */
+        .d-duo-section{position:relative;z-index:2;max-width:1400px;margin:0 auto;padding:20px 60px 60px}
+        .d-duo-card{position:relative;overflow:hidden;cursor:pointer;background:linear-gradient(135deg,rgba(40,30,80,0.8),rgba(80,30,100,0.8));backdrop-filter:blur(8px);transition:all 0.3s;display:grid;grid-template-columns:1fr 1.4fr 1fr;min-height:260px}
+        .d-duo-card:hover{transform:translateY(-4px);box-shadow:0 20px 50px rgba(140,100,220,0.45)}
+        .d-duo-img{position:relative;overflow:hidden}
+        .d-duo-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.6s}
+        .d-duo-card:hover .d-duo-img img{transform:scale(1.05)}
+        .d-duo-img.left img{object-position:right 18%}
+        .d-duo-img.right img{object-position:left 18%}
+        .d-duo-img-fade-l{position:absolute;top:0;right:0;width:50%;height:100%;background:linear-gradient(to right,transparent,rgba(45,20,75,0.9))}
+        .d-duo-img-fade-r{position:absolute;top:0;left:0;width:50%;height:100%;background:linear-gradient(to left,transparent,rgba(60,20,80,0.9))}
+        .d-duo-text{position:relative;z-index:2;padding:32px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+        .d-duo-mark{font-family:sans-serif;font-size:10px;letter-spacing:6px;color:#c0a8e8;margin-bottom:10px}
+        .d-duo-name{font-family:'Diphylleia','Noto Serif KR',serif;font-size:30px;color:#fff;letter-spacing:8px;margin-bottom:12px;text-shadow:0 2px 18px rgba(0,0,0,0.9),0 0 20px rgba(220,180,255,0.35)}
+        .d-duo-desc{font-family:sans-serif;font-size:13px;color:rgba(255,255,255,0.85);line-height:1.8;margin-bottom:18px;text-shadow:0 2px 8px rgba(0,0,0,0.7)}
+        .d-duo-cta{font-family:'Noto Serif KR',serif;font-size:12px;letter-spacing:3px;color:#fff;padding:10px 24px;border:1px solid rgba(220,180,255,0.5);background:rgba(220,180,255,0.06);transition:all 0.2s}
+        .d-duo-card:hover .d-duo-cta{background:rgba(220,180,255,0.2);border-color:#fff}
 
         /* ───────── 푸터 (컴팩트) ───────── */
         .d-footer{position:relative;z-index:2;padding:18px 60px;background:rgba(0,0,0,0.55);backdrop-filter:blur(10px);border-top:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
@@ -144,6 +162,27 @@ export function HomeDesktop({ characters }: Props) {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      <section className="d-duo-section">
+        <div className="d-sec-tag">✦  合 一  ✦</div>
+        <div className="d-sec-title">운명의 합주(合奏)</div>
+        <div className="d-duo-card" onClick={() => router.push("/duo")}>
+          <div className="d-duo-img left">
+            <img src="/char-jawun.png" alt="자운" />
+            <div className="d-duo-img-fade-l" />
+          </div>
+          <div className="d-duo-text">
+            <div className="d-duo-mark">SAJU × TAROT</div>
+            <div className="d-duo-name">자운 × 월령</div>
+            <div className="d-duo-desc">사주의 깊이와 타로의 직관이<br/>하나의 질문에 함께 답합니다</div>
+            <div className="d-duo-cta">연애 · 재회 · 궁합 · 돈 · 일  →</div>
+          </div>
+          <div className="d-duo-img right">
+            <img src="/char-wolryeong.png" alt="월령" />
+            <div className="d-duo-img-fade-r" />
+          </div>
         </div>
       </section>
 
