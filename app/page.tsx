@@ -1,8 +1,15 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { HomeDesktop } from "@/app/components/HomeDesktop";
 export default function Home() {
+  const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
+  useEffect(() => {
+    const check = () => setIsDesktop(window.innerWidth >= 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
   const [activeTab, setActiveTab] = useState("home");
   const router = useRouter();
   const characters = [
@@ -18,16 +25,11 @@ export default function Home() {
     { id: "tojeong", icon: "📜", label: "토정비결", free: true, path: "/tojeong" },
     { id: "replay", icon: "📦", label: "보관함", free: true, path: "/replay" },
   ];
-  return (
-    <>
-      <style>{`
-        @media (min-width:768px){.m-only{display:none !important}}
-        @media (max-width:767px){.d-only{display:none !important}}
-      `}</style>
-      <div className="d-only"><HomeDesktop characters={characters} /></div>
-      <div className="m-only"><MobileHome characters={characters} tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} router={router} /></div>
-    </>
-  );
+  // 서버/초기 렌더 = null 상태: 빈 화면. 클라이언트에서 결정 후 하나만 렌더.
+  if (isDesktop === null) return <div style={{background:"#060410",minHeight:"100dvh"}}/>;
+  return isDesktop
+    ? <HomeDesktop characters={characters} />
+    : <MobileHome characters={characters} tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} router={router} />;
 }
 
 function MobileHome({ characters, tabs, activeTab, setActiveTab, router }: {
