@@ -25,13 +25,18 @@ export function HomeDesktop({ characters }: Props) {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;700&family=Cinzel:wght@400;500&family=Diphylleia&display=swap');
 
-        .d-app{width:100%;min-height:100dvh;color:#fff;font-family:'Noto Serif KR',serif;position:relative}
+        /* 데스크톱 뷰일 때 body의 검정 배경 제거 */
+        @media (min-width:768px){
+          html,body{background:transparent !important}
+        }
 
-        /* 브라우저 전체 = 달빛 배경만 (틴트 최소화) */
-        .d-bg{position:fixed;inset:0;z-index:-1;overflow:hidden}
+        .d-app{width:100%;min-height:100dvh;color:#fff;font-family:'Noto Serif KR',serif;position:relative;background:transparent}
+
+        /* 브라우저 전체 = 달빛 배경만 */
+        .d-bg{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
         .d-bg img{width:100%;height:100%;object-fit:cover;display:block}
-        /* 최하단만 살짝 어둡게 (푸터 영역 가독성) — 상단/중앙 이미지는 선명 그대로 */
-        .d-bg-tint{position:fixed;inset:0;z-index:-1;background:linear-gradient(180deg,transparent 0%,transparent 70%,rgba(0,0,0,0.4) 100%);pointer-events:none}
+        /* 최하단만 살짝 어둡게 */
+        .d-bg-tint{position:fixed;inset:0;z-index:1;background:linear-gradient(180deg,transparent 0%,transparent 70%,rgba(0,0,0,0.4) 100%);pointer-events:none}
 
         /* ───────── 헤더 바 ───────── */
         .d-header{position:fixed;top:0;left:0;right:0;z-index:100;height:70px;display:flex;align-items:center;background:rgba(0,0,0,0.35);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,0.08)}
@@ -46,7 +51,7 @@ export function HomeDesktop({ characters }: Props) {
         .d-login:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.7)}
 
         /* ───────── 히어로 ───────── */
-        .d-hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:120px 60px 60px;text-align:center}
+        .d-hero{position:relative;z-index:2;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:120px 60px 60px;text-align:center}
         .d-hero-tag{font-family:sans-serif;font-size:12px;letter-spacing:10px;color:rgba(255,255,255,0.85);margin-bottom:26px;text-shadow:0 2px 10px rgba(0,0,0,0.9)}
         .d-hero-title{font-family:'Noto Serif KR',serif;font-size:64px;color:#fff;line-height:1.4;letter-spacing:6px;margin-bottom:24px;text-shadow:0 4px 30px rgba(0,0,0,0.95);font-weight:500}
         .d-hero-title span{color:#a8c8ff;text-shadow:0 4px 30px rgba(0,0,0,0.95),0 0 40px rgba(140,180,255,0.6)}
@@ -55,7 +60,7 @@ export function HomeDesktop({ characters }: Props) {
         .d-hero-cta:hover{background:rgba(255,255,255,0.2);border-color:rgba(255,255,255,0.8);transform:translateY(-2px)}
 
         /* ───────── 섹션 ───────── */
-        .d-section{max-width:1400px;margin:0 auto;padding:100px 60px}
+        .d-section{position:relative;z-index:2;max-width:1400px;margin:0 auto;padding:100px 60px}
         .d-sec-tag{font-family:sans-serif;font-size:12px;letter-spacing:8px;color:rgba(255,255,255,0.7);text-align:center;margin-bottom:12px;text-shadow:0 2px 10px rgba(0,0,0,0.9)}
         .d-sec-title{font-family:'Noto Serif KR',serif;font-size:36px;color:#fff;text-align:center;letter-spacing:6px;margin-bottom:60px;font-weight:500;text-shadow:0 2px 16px rgba(0,0,0,0.9)}
 
@@ -78,7 +83,7 @@ export function HomeDesktop({ characters }: Props) {
         .d-tag-adult{background:rgba(180,50,90,0.3);color:#ff9ab0;border:1px solid rgba(200,80,120,0.5)}
 
         /* ───────── 푸터 ───────── */
-        .d-footer{padding:50px 60px 40px;background:rgba(0,0,0,0.45);backdrop-filter:blur(10px);border-top:1px solid rgba(255,255,255,0.08);text-align:center}
+        .d-footer{position:relative;z-index:2;padding:50px 60px 40px;background:rgba(0,0,0,0.45);backdrop-filter:blur(10px);border-top:1px solid rgba(255,255,255,0.08);text-align:center}
         .d-footer-brand{font-family:'Diphylleia','Noto Serif KR',serif;font-size:22px;color:#fff;letter-spacing:6px;margin-bottom:12px}
         .d-footer-links{display:flex;justify-content:center;gap:26px;margin-bottom:16px;flex-wrap:wrap}
         .d-footer-links span{font-family:sans-serif;font-size:13px;color:rgba(255,255,255,0.6);cursor:pointer;letter-spacing:2px}
