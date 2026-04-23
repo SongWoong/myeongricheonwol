@@ -42,21 +42,13 @@ export function HomeDesktop({ characters }: Props) {
           radial-gradient(ellipse 60% 40% at 50% 35%,rgba(0,0,0,0.25),transparent 60%);
           pointer-events:none}
 
-        /* 별똥별 효과 */
-        .d-shooting-stars{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
-        .d-shooting-star{position:absolute;width:2px;height:2px;background:linear-gradient(-45deg,#fff,rgba(255,255,255,0));border-radius:50%;filter:drop-shadow(0 0 6px #fff);animation:d-shoot 6s linear infinite;opacity:0}
-        .d-shooting-star::before{content:"";position:absolute;top:50%;transform:translateY(-50%);width:100px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.9),transparent);right:0}
-        @keyframes d-shoot{
-          0%{transform:translate(0,0) rotate(215deg);opacity:0}
-          5%{opacity:1}
-          60%{opacity:1}
-          100%{transform:translate(-900px,900px) rotate(215deg);opacity:0}
+        /* 배경 느린 드리프트 — 떠다니는 느낌 */
+        .d-bg img{animation:d-bg-drift 40s ease-in-out infinite alternate}
+        @keyframes d-bg-drift{
+          0%{transform:scale(1.02) translate(0,0)}
+          50%{transform:scale(1.06) translate(-12px,-8px)}
+          100%{transform:scale(1.04) translate(10px,-4px)}
         }
-        .d-shooting-star.s1{top:10%;left:85%;animation-delay:0s}
-        .d-shooting-star.s2{top:5%;left:70%;animation-delay:3s;animation-duration:5s}
-        .d-shooting-star.s3{top:20%;left:95%;animation-delay:6s;animation-duration:7s}
-        .d-shooting-star.s4{top:30%;left:80%;animation-delay:9s;animation-duration:5.5s}
-        .d-shooting-star.s5{top:15%;left:60%;animation-delay:12s;animation-duration:6s}
 
         /* ───────── 헤더 바 (반투명 풀와이드) ───────── */
         .d-header{position:fixed;top:0;left:0;width:100vw;z-index:100;height:72px;display:flex;align-items:center;background:rgba(10,6,18,0.5);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,0.08)}
@@ -133,13 +125,6 @@ export function HomeDesktop({ characters }: Props) {
 
       <div className="d-bg"><img src="/bg.png" alt="" /></div>
       <div className="d-bg-tint" />
-      <div className="d-shooting-stars">
-        <span className="d-shooting-star s1" />
-        <span className="d-shooting-star s2" />
-        <span className="d-shooting-star s3" />
-        <span className="d-shooting-star s4" />
-        <span className="d-shooting-star s5" />
-      </div>
 
       <header className="d-header">
         <div className="d-header-inner">
