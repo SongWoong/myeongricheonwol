@@ -52,45 +52,45 @@ export function HomeDesktop({ characters }: Props) {
         .d-login{padding:9px 22px;font-size:13px;border:1px solid rgba(255,255,255,0.45);color:#fff;background:transparent;cursor:pointer;font-family:'Noto Serif KR',serif;letter-spacing:3px;transition:all 0.2s;white-space:nowrap}
         .d-login:hover{background:rgba(255,255,255,0.1);border-color:#fff}
 
-        /* ───────── 히어로 ───────── */
-        .d-hero{position:relative;z-index:2;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:120px 60px 60px;text-align:center}
-        .d-hero-tag{font-family:sans-serif;font-size:12px;letter-spacing:10px;color:rgba(255,255,255,0.85);margin-bottom:26px;text-shadow:0 2px 10px rgba(0,0,0,0.9)}
-        .d-hero-title{font-family:'Noto Serif KR',serif;font-size:64px;color:#fff;line-height:1.4;letter-spacing:6px;margin-bottom:24px;text-shadow:0 4px 30px rgba(0,0,0,0.95);font-weight:500}
-        .d-hero-title span{color:#a8c8ff;text-shadow:0 4px 30px rgba(0,0,0,0.95),0 0 40px rgba(140,180,255,0.6)}
-        .d-hero-sub{font-family:sans-serif;font-size:17px;color:rgba(255,255,255,0.85);letter-spacing:4px;text-shadow:0 2px 10px rgba(0,0,0,0.95);margin-bottom:40px}
-        .d-hero-cta{padding:14px 36px;background:rgba(255,255,255,0.1);backdrop-filter:blur(8px);color:#fff;border:1px solid rgba(255,255,255,0.5);font-family:'Noto Serif KR',serif;font-size:14px;letter-spacing:5px;cursor:pointer;transition:all 0.2s}
+        /* ───────── 히어로 (압축 — 한 화면 안) ───────── */
+        .d-hero{position:relative;z-index:2;padding:110px 60px 24px;text-align:center}
+        .d-hero-tag{font-family:sans-serif;font-size:11px;letter-spacing:8px;color:rgba(255,255,255,0.85);margin-bottom:14px;text-shadow:0 2px 10px rgba(0,0,0,0.9)}
+        .d-hero-title{font-family:'Noto Serif KR',serif;font-size:42px;color:#fff;line-height:1.35;letter-spacing:5px;margin-bottom:12px;text-shadow:0 4px 30px rgba(0,0,0,0.95);font-weight:500}
+        .d-hero-title span{color:#a8c8ff;text-shadow:0 4px 30px rgba(0,0,0,0.95),0 0 30px rgba(140,180,255,0.6)}
+        .d-hero-sub{font-family:sans-serif;font-size:14px;color:rgba(255,255,255,0.85);letter-spacing:3px;text-shadow:0 2px 10px rgba(0,0,0,0.95);margin-bottom:20px}
+        .d-hero-cta{padding:11px 28px;background:rgba(255,255,255,0.1);backdrop-filter:blur(8px);color:#fff;border:1px solid rgba(255,255,255,0.5);font-family:'Noto Serif KR',serif;font-size:13px;letter-spacing:4px;cursor:pointer;transition:all 0.2s}
         .d-hero-cta:hover{background:rgba(255,255,255,0.2);border-color:rgba(255,255,255,0.8);transform:translateY(-2px)}
 
-        /* ───────── 섹션 ───────── */
-        .d-section{position:relative;z-index:2;max-width:1400px;margin:0 auto;padding:100px 60px}
-        .d-sec-tag{font-family:sans-serif;font-size:12px;letter-spacing:8px;color:rgba(255,255,255,0.7);text-align:center;margin-bottom:12px;text-shadow:0 2px 10px rgba(0,0,0,0.9)}
-        .d-sec-title{font-family:'Noto Serif KR',serif;font-size:36px;color:#fff;text-align:center;letter-spacing:6px;margin-bottom:60px;font-weight:500;text-shadow:0 2px 16px rgba(0,0,0,0.9)}
+        /* ───────── 섹션 (패딩 축소) ───────── */
+        .d-section{position:relative;z-index:2;max-width:1400px;margin:0 auto;padding:20px 60px 40px}
+        .d-sec-tag{font-family:sans-serif;font-size:11px;letter-spacing:6px;color:rgba(255,255,255,0.7);text-align:center;margin-bottom:6px;text-shadow:0 2px 10px rgba(0,0,0,0.9)}
+        .d-sec-title{font-family:'Noto Serif KR',serif;font-size:22px;color:#fff;text-align:center;letter-spacing:4px;margin-bottom:24px;font-weight:500;text-shadow:0 2px 16px rgba(0,0,0,0.9)}
 
-        /* ───────── 캐릭터 4명 한 줄 ───────── */
-        .d-char-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+        /* ───────── 캐릭터 4명 한 줄 (컴팩트) ───────── */
+        .d-char-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
         .d-char-card{position:relative;cursor:pointer;overflow:hidden;background:rgba(0,0,0,0.35);backdrop-filter:blur(8px);transition:all 0.3s}
-        .d-char-card:hover{transform:translateY(-8px);box-shadow:0 20px 50px rgba(0,0,0,0.5)}
-        .d-char-img{position:relative;aspect-ratio:3/4;overflow:hidden}
+        .d-char-card:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,0,0,0.5)}
+        .d-char-img{position:relative;aspect-ratio:3/4;overflow:hidden;max-height:360px}
         .d-char-img img{width:100%;height:100%;object-fit:cover;object-position:top;display:block;transition:transform 0.5s}
         .d-char-card:hover .d-char-img img{transform:scale(1.05)}
-        .d-char-img-fade{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(0,0,0,0.95));pointer-events:none}
-        .d-char-name-overlay{position:absolute;bottom:18px;left:0;right:0;text-align:center;z-index:2}
-        .d-char-name{font-size:28px;color:#fff;letter-spacing:8px;text-shadow:0 2px 12px rgba(0,0,0,0.95);margin-bottom:4px;font-weight:500}
-        .d-char-hanja{font-size:11px;color:rgba(255,255,255,0.6);letter-spacing:6px}
-        .d-char-body{padding:22px 20px 26px;text-align:center;background:rgba(0,0,0,0.5)}
-        .d-char-role{font-family:sans-serif;font-size:11px;font-weight:700;letter-spacing:5px;margin-bottom:10px}
-        .d-char-desc{font-family:sans-serif;font-size:12.5px;color:rgba(255,255,255,0.72);line-height:1.6;margin-bottom:14px;min-height:40px}
-        .d-char-tag{font-family:sans-serif;font-size:10px;padding:5px 12px;display:inline-block;letter-spacing:2px}
+        .d-char-img-fade{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 55%,rgba(0,0,0,0.95));pointer-events:none}
+        .d-char-name-overlay{position:absolute;bottom:14px;left:0;right:0;text-align:center;z-index:2}
+        .d-char-name{font-size:22px;color:#fff;letter-spacing:6px;text-shadow:0 2px 12px rgba(0,0,0,0.95);margin-bottom:3px;font-weight:500}
+        .d-char-hanja{font-size:10px;color:rgba(255,255,255,0.6);letter-spacing:5px}
+        .d-char-body{padding:14px 16px 18px;text-align:center;background:rgba(0,0,0,0.55)}
+        .d-char-role{font-family:sans-serif;font-size:11px;font-weight:700;letter-spacing:4px;margin-bottom:6px}
+        .d-char-desc{font-family:sans-serif;font-size:11.5px;color:rgba(255,255,255,0.72);line-height:1.5;margin-bottom:10px;min-height:34px}
+        .d-char-tag{font-family:sans-serif;font-size:10px;padding:4px 10px;display:inline-block;letter-spacing:2px}
         .d-tag-free{background:rgba(60,120,200,0.3);color:#a8d0ff;border:1px solid rgba(100,160,240,0.5)}
         .d-tag-adult{background:rgba(180,50,90,0.3);color:#ff9ab0;border:1px solid rgba(200,80,120,0.5)}
 
-        /* ───────── 푸터 ───────── */
-        .d-footer{position:relative;z-index:2;padding:50px 60px 40px;background:rgba(0,0,0,0.45);backdrop-filter:blur(10px);border-top:1px solid rgba(255,255,255,0.08);text-align:center}
-        .d-footer-brand{font-family:'Diphylleia','Noto Serif KR',serif;font-size:22px;color:#fff;letter-spacing:6px;margin-bottom:12px}
-        .d-footer-links{display:flex;justify-content:center;gap:26px;margin-bottom:16px;flex-wrap:wrap}
-        .d-footer-links span{font-family:sans-serif;font-size:13px;color:rgba(255,255,255,0.6);cursor:pointer;letter-spacing:2px}
+        /* ───────── 푸터 (컴팩트) ───────── */
+        .d-footer{position:relative;z-index:2;padding:18px 60px;background:rgba(0,0,0,0.55);backdrop-filter:blur(10px);border-top:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
+        .d-footer-brand{font-family:'Diphylleia','Noto Serif KR',serif;font-size:16px;color:#fff;letter-spacing:5px}
+        .d-footer-links{display:flex;gap:20px;flex-wrap:wrap}
+        .d-footer-links span{font-family:sans-serif;font-size:12px;color:rgba(255,255,255,0.6);cursor:pointer;letter-spacing:1.5px}
         .d-footer-links span:hover{color:#fff}
-        .d-footer-meta{font-family:sans-serif;font-size:11px;color:rgba(255,255,255,0.4);letter-spacing:1px;line-height:1.7}
+        .d-footer-meta{font-family:sans-serif;font-size:10.5px;color:rgba(255,255,255,0.4);letter-spacing:1px}
       `}</style>
 
       <div className="d-bg"><img src="/bg.png" alt="" /></div>
@@ -155,7 +155,7 @@ export function HomeDesktop({ characters }: Props) {
           <span onClick={() => router.push("/privacy")}>개인정보처리방침</span>
           <span onClick={() => router.push("/refund")}>환불정책</span>
         </div>
-        <div className="d-footer-meta">© 2026 명리천월 · 풀이는 엔터테인먼트 목적입니다</div>
+        <div className="d-footer-meta">© 2026 · 엔터테인먼트 목적</div>
       </footer>
     </div>
   );
