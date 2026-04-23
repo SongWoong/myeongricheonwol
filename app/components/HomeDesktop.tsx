@@ -27,10 +27,11 @@ export function HomeDesktop({ characters }: Props) {
 
         .d-app{width:100%;min-height:100dvh;color:#fff;font-family:'Noto Serif KR',serif;position:relative}
 
-        /* 브라우저 전체 = 달빛 배경만 (보라 없음) */
+        /* 브라우저 전체 = 달빛 배경만 (틴트 최소화) */
         .d-bg{position:fixed;inset:0;z-index:-1;overflow:hidden}
         .d-bg img{width:100%;height:100%;object-fit:cover;display:block}
-        .d-bg-tint{position:fixed;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(0,0,0,0.15) 0%,rgba(0,0,0,0.35) 50%,rgba(0,0,0,0.75) 100%);pointer-events:none}
+        /* 최하단만 살짝 어둡게 (푸터 영역 가독성) — 상단/중앙 이미지는 선명 그대로 */
+        .d-bg-tint{position:fixed;inset:0;z-index:-1;background:linear-gradient(180deg,transparent 0%,transparent 70%,rgba(0,0,0,0.4) 100%);pointer-events:none}
 
         /* ───────── 헤더 바 ───────── */
         .d-header{position:fixed;top:0;left:0;right:0;z-index:100;height:70px;display:flex;align-items:center;background:rgba(0,0,0,0.35);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,0.08)}
