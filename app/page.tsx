@@ -44,6 +44,11 @@ export default function Home() {
         .sec-tag{font-family:sans-serif;font-size:10px;color:#6a8abc;letter-spacing:5px;margin-bottom:6px;text-align:center}
         .sec-title{font-size:15px;color:#a0b8dc;font-weight:400;letter-spacing:1px;text-align:center;margin-bottom:18px}
         .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+        @media (min-width:768px){.grid{grid-template-columns:1fr 1fr 1fr 1fr;gap:14px}}
+        @media (min-width:768px){.hero{height:380px}.hero-h1{font-size:34px}.hero-sub{font-size:13px}}
+        @media (min-width:768px){.section{padding:32px 24px}.sec-title{font-size:18px}}
+        @media (min-width:768px){.duo-img-wrap{height:280px}.duo-name{font-size:24px}.duo-desc-line{font-size:13px}}
+        @media (min-width:768px){.cname{font-size:18px}.crole{font-size:11px}.cdesc{font-size:11.5px}}
         .card{border-radius:12px;overflow:hidden;cursor:pointer;transition:transform 0.2s}
         .card:hover{transform:scale(1.02)}.card:active{transform:scale(0.98)}
         .img-wrap{position:relative;aspect-ratio:3/4}
