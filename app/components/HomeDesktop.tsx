@@ -38,17 +38,17 @@ export function HomeDesktop({ characters }: Props) {
         /* 최하단만 살짝 어둡게 */
         .d-bg-tint{position:fixed;inset:0;z-index:1;background:linear-gradient(180deg,transparent 0%,transparent 70%,rgba(0,0,0,0.4) 100%);pointer-events:none}
 
-        /* ───────── 헤더 바 ───────── */
-        .d-header{position:fixed;top:0;left:0;right:0;z-index:100;height:70px;display:flex;align-items:center;background:rgba(0,0,0,0.35);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,0.08)}
-        .d-header-inner{width:100%;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 56px;gap:48px}
-        .d-logo{cursor:pointer;justify-self:start}
-        .d-logo-mark{font-family:'Diphylleia','Noto Serif KR',serif;font-size:24px;color:#fff;letter-spacing:8px;font-weight:500;text-shadow:0 2px 12px rgba(0,0,0,0.8)}
-        .d-nav{display:flex;align-items:center;gap:36px;justify-self:center}
-        .d-nav-item{font-family:'Noto Serif KR',serif;font-size:14px;color:rgba(255,255,255,0.85);cursor:pointer;letter-spacing:3px;text-shadow:0 2px 8px rgba(0,0,0,0.9);transition:color 0.2s;padding:6px 0;position:relative}
+        /* ───────── 헤더 바 (불투명 풀와이드) ───────── */
+        .d-header{position:fixed;top:0;left:0;right:0;z-index:100;height:72px;display:flex;align-items:center;background:#0a0612;border-bottom:1px solid rgba(255,255,255,0.1)}
+        .d-header-inner{width:100%;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 48px;gap:32px}
+        .d-logo{cursor:pointer;justify-self:start;white-space:nowrap}
+        .d-logo-mark{font-family:'Diphylleia','Noto Serif KR',serif;font-size:22px;color:#fff;letter-spacing:8px;font-weight:500}
+        .d-nav{display:flex;align-items:center;gap:28px;justify-self:center;white-space:nowrap}
+        .d-nav-item{font-family:'Noto Serif KR',serif;font-size:14px;color:rgba(255,255,255,0.85);cursor:pointer;letter-spacing:2px;transition:color 0.2s;padding:6px 0;position:relative;white-space:nowrap}
         .d-nav-item:hover{color:#fff}
         .d-nav-item:hover::after{content:"";position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);width:20px;height:1px;background:rgba(255,255,255,0.8)}
-        .d-login{justify-self:end;padding:9px 22px;font-size:13px;border:1px solid rgba(255,255,255,0.4);color:#fff;background:transparent;cursor:pointer;font-family:'Noto Serif KR',serif;letter-spacing:3px;transition:all 0.2s;text-shadow:0 2px 8px rgba(0,0,0,0.8)}
-        .d-login:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.7)}
+        .d-login{justify-self:end;padding:9px 22px;font-size:13px;border:1px solid rgba(255,255,255,0.45);color:#fff;background:transparent;cursor:pointer;font-family:'Noto Serif KR',serif;letter-spacing:3px;transition:all 0.2s;white-space:nowrap}
+        .d-login:hover{background:rgba(255,255,255,0.1);border-color:#fff}
 
         /* ───────── 히어로 ───────── */
         .d-hero{position:relative;z-index:2;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:120px 60px 60px;text-align:center}
