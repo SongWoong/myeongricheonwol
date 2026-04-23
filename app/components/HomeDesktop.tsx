@@ -26,9 +26,14 @@ export function HomeDesktop({ characters }: Props) {
         @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;700&family=Cinzel:wght@400;500;600&family=Diphylleia&family=Cormorant+Garamond:wght@300;400;500&display=swap');
 
         .d-app{width:100%;min-height:100dvh;color:#e0e6ff;font-family:'Noto Serif KR',serif;position:relative;overflow-x:hidden;background:#04030a}
-        /* 브라우저 전체 배경 = 달 이미지 (고정, 풀블리드, seam 없음) */
+        /* 브라우저 전체 배경 = 달 이미지 (고정, 풀블리드) */
         .d-page-bg{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:0;pointer-events:none;overflow:hidden}
-        .d-page-bg img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;object-position:center center}
+        .d-page-bg img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;object-position:30% center;filter:brightness(0.85) contrast(0.95)}
+        /* 이미지 seam 마스킹 — 부드러운 통일 오버레이 */
+        .d-page-mask{position:fixed;inset:0;z-index:0;pointer-events:none;background:
+          radial-gradient(ellipse 90% 90% at 50% 50%,transparent 40%,rgba(10,6,24,0.6) 85%),
+          linear-gradient(180deg,rgba(10,6,24,0.1),rgba(10,6,24,0.15) 50%,rgba(10,6,24,0.5));
+          backdrop-filter:blur(0.5px);-webkit-backdrop-filter:blur(0.5px)}
 
         /* ───────── 배경 — 구름 + 별빛 (전체 페이지) ───────── */
         .d-bg-stars{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:
@@ -197,6 +202,7 @@ export function HomeDesktop({ characters }: Props) {
       `}</style>
 
       <div className="d-page-bg"><img src="/bg.png" alt="" /></div>
+      <div className="d-page-mask" />
       <div className="d-bg-stars" />
       <div className="d-bg-clouds" />
       <div className="d-bg-clouds2" />
