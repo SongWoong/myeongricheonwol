@@ -9,7 +9,7 @@ const client = new Anthropic();
 
 export async function POST(req: NextRequest) {
   try {
-    const { name, birthdate, time, gender, calendar, chapterId = "general" } = await req.json();
+    const { name, birthdate, time, gender, calendar, chapterId = "general", longitude } = await req.json();
 
     if (!name || !birthdate) {
       return NextResponse.json({ error: "이름과 생년월일은 필수입니다" }, { status: 400 });
@@ -20,8 +20,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "존재하지 않는 챕터입니다" }, { status: 400 });
     }
 
-    const chart = calcSaju({ birthdate, time, calendar, gender });
+    const chart = calcSaju({ birthdate, time, calendar, gender, longitude });
     const sajuBlock = formatSajuForPrompt(chart);
+
+    const now = new Date();
+    const todayStr = `${now.getFullYear()}년 ${now.getMonth() + 1}월 ${now.getDate()}일`;
 
     const heavy = chapter.id === "general" || chapter.id === "thisyear" || chapter.id === "daewoon";
     const isLight = chapter.id === "thisyear-light";
@@ -38,6 +41,7 @@ export async function POST(req: NextRequest) {
 
 이름: ${name}
 성별: ${gender}
+오늘 날짜: ${todayStr}
 
 ${sajuBlock}
 

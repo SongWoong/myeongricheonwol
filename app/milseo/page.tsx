@@ -1,23 +1,57 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { LIMITS, checkLimit, recordUsage, saveResult, loadResult } from "@/app/lib/limits";
 import { MILSEO_CHAPTERS, type MilseoChapterDef } from "@/app/lib/milseo-chapters";
 import { ShareButtons } from "@/app/components/ShareButtons";
+
+/** 한국 주요 도시의 경도 데이터 (진태양시 보정용) */
+const CITIES: { name: string; longitude: number }[] = [
+  { name: "선택 안 함 (KST)", longitude: 0 },
+  { name: "서울 (126.98°)", longitude: 126.98 },
+  { name: "부산 (129.08°)", longitude: 129.08 },
+  { name: "인천 (126.70°)", longitude: 126.70 },
+  { name: "대구 (128.60°)", longitude: 128.60 },
+  { name: "대전 (127.38°)", longitude: 127.38 },
+  { name: "광주 (126.85°)", longitude: 126.85 },
+  { name: "울산 (129.31°)", longitude: 129.31 },
+  { name: "수원 (127.03°)", longitude: 127.03 },
+  { name: "춘천 (127.73°)", longitude: 127.73 },
+  { name: "청주 (127.49°)", longitude: 127.49 },
+  { name: "전주 (127.15°)", longitude: 127.15 },
+  { name: "제주 (126.53°)", longitude: 126.53 },
+  { name: "평양 (125.75°)", longitude: 125.75 },
+  { name: "도쿄 (139.69°)", longitude: 139.69 },
+  { name: "베이징 (116.41°)", longitude: 116.41 },
+  { name: "직접 입력", longitude: -1 },
+];
 
 type Stage = "gate" | "chapters" | "form";
 type FormState = {
   name: string; year: string; month: string; day: string;
   hour: string; minute: string; gender: string; calendar: string;
+  city: string; longitude: string;
 };
 
 const IS_DEV = process.env.NODE_ENV === "development";
 const GATE_KEY = "milseo_age_verified";
+const GATE_EXPIRY_HOURS = 24; // 24시간 후 재인증 필요
 
 export default function MilseoPage() {
   const router = useRouter();
+  const { data: session, status } = useSession();
+  const isLoggedIn = status === "authenticated";
+
+  /** 카카오 로그인 시 age_range로 성인 여부 확인 */
+  const kakaoAgeRange = (session?.user as { ageRange?: string } | undefined)?.ageRange;
+  const kakaoAutoVerified = !!kakaoAgeRange && !["1~9", "10~14", "15~19"].includes(kakaoAgeRange);
   const [stage, setStage] = useState<Stage>("gate");
   const [error, setError] = useState("");
+  const [gateError, setGateError] = useState("");
+  const [gateYear, setGateYear] = useState("");
+  const [gateMonth, setGateMonth] = useState("");
+  const [gateDay, setGateDay] = useState("");
   const [generalLimit, setGeneralLimit] = useState(checkLimit(LIMITS.milseo));
   const [chapterResults, setChapterResults] = useState<Record<string, string>>({});
   const [loadingChapter, setLoadingChapter] = useState<string | null>(null);
@@ -25,25 +59,78 @@ export default function MilseoPage() {
   const [pendingChapterId, setPendingChapterId] = useState<string | null>(null);
   const [form, setForm] = useState<FormState>({
     name: "", year: "", month: "", day: "", hour: "", minute: "",
-    gender: "여성", calendar: "양력",
+    gender: "여성", calendar: "양력", city: "", longitude: "",
   });
 
   useEffect(() => {
     setGeneralLimit(checkLimit(LIMITS.milseo));
-    const verified = localStorage.getItem(GATE_KEY) === "1";
     const cached = loadResult<{ form: FormState; chapters: Record<string, string> }>("milseo");
     if (cached?.payload?.form && cached.payload.chapters) {
       setForm(cached.payload.form);
       setChapterResults(cached.payload.chapters);
     }
-    setStage(verified ? "chapters" : "gate");
-  }, []);
+    if (status === "loading") return;
+
+    // 카카오 연령 자동 검증 or 기존 게이트 확인
+    if (isLoggedIn && kakaoAutoVerified) {
+      localStorage.setItem(GATE_KEY, JSON.stringify({ timestamp: Date.now(), loggedIn: true, autoAge: true }));
+      setStage("chapters");
+      return;
+    }
+    const verified = checkGateExpiry();
+    setStage(verified && isLoggedIn ? "chapters" : "gate");
+  }, [status, isLoggedIn, kakaoAutoVerified]);
+
+  /** localStorage 게이트 만료 확인 (로그인 상태도 확인) */
+  const checkGateExpiry = (): boolean => {
+    try {
+      const raw = localStorage.getItem(GATE_KEY);
+      if (!raw) return false;
+      const { timestamp, loggedIn } = JSON.parse(raw);
+      if (!loggedIn) return false; // 로그인 없이 저장된 게이트는 무효
+      const elapsed = (Date.now() - timestamp) / (1000 * 60 * 60);
+      return elapsed < GATE_EXPIRY_HOURS;
+    } catch {
+      return false;
+    }
+  };
+
+  const gateDaysInMonth = (() => {
+    const y = Number(gateYear), m = Number(gateMonth);
+    if (!y || !m) return 31;
+    return new Date(y, m, 0).getDate();
+  })();
+  const gateDays = Array.from({ length: gateDaysInMonth }, (_, i) => String(i + 1).padStart(2, "0"));
+
+  const verifyGate = () => {
+    setGateError("");
+    const y = Number(gateYear), m = Number(gateMonth), d = Number(gateDay);
+    if (!y || !m || !d) {
+      setGateError("생년월일을 모두 선택해주세요");
+      return;
+    }
+    const birth = new Date(y, m - 1, d);
+    const now = new Date();
+    let age = now.getFullYear() - birth.getFullYear();
+    const monthDiff = now.getMonth() - birth.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < birth.getDate())) age--;
+
+    if (age < 19) {
+      setGateError(`만 ${age}세입니다. 밀서는 만 19세 이상만 이용할 수 있습니다.`);
+      return;
+    }
+    // 인증 성공
+    localStorage.setItem(GATE_KEY, JSON.stringify({ timestamp: Date.now(), loggedIn: true }));
+    setStage("chapters");
+  };
 
   const update = (k: keyof FormState, v: string) => setForm((p) => ({ ...p, [k]: v }));
 
   const thisYear = new Date().getFullYear();
   const years = Array.from({ length: thisYear - 1900 + 1 }, (_, i) => String(thisYear - i));
   const months = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, "0"));
+  const gateYears = Array.from({ length: thisYear - 1920 + 1 }, (_, i) => String(thisYear - i));
+  const gateMonths = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, "0"));
   const daysInMonth = (() => {
     const y = Number(form.year), m = Number(form.month);
     if (!y || !m) return 31;
@@ -55,11 +142,6 @@ export default function MilseoPage() {
   const birthdate = form.year && form.month && form.day ? `${form.year}-${form.month}-${form.day}` : "";
   const timeStr = form.hour && form.minute ? `${form.hour}:${form.minute}` : "";
   const hasFormData = !!(form.name && form.year && form.month && form.day);
-
-  const enterGate = () => {
-    localStorage.setItem(GATE_KEY, "1");
-    setStage("chapters");
-  };
 
   const submitFormThenChapter = (e: React.FormEvent) => {
     e.preventDefault();
@@ -126,6 +208,7 @@ export default function MilseoPage() {
           name: form.name, birthdate, time: timeStr,
           gender: form.gender, calendar: form.calendar,
           chapterId: chapter.id,
+          longitude: form.longitude ? Number(form.longitude) : undefined,
         }),
       });
       const data = await res.json();
@@ -156,6 +239,7 @@ export default function MilseoPage() {
           name: form.name, birthdate, time: timeStr,
           gender: form.gender, calendar: form.calendar,
           chapterId: chapter.id,
+          longitude: form.longitude ? Number(form.longitude) : undefined,
         }),
       });
       const data = await res.json();
@@ -202,8 +286,19 @@ export default function MilseoPage() {
         .gate-title{font-size:20px;color:#fff;letter-spacing:4px;margin-bottom:18px}
         .gate-warn{font-family:sans-serif;font-size:12px;line-height:1.8;color:rgba(255,220,230,0.65);margin-bottom:26px;letter-spacing:0.5px}
         .gate-warn b{color:#ff8090;font-weight:600}
-        .gate-btn{padding:14px 32px;background:linear-gradient(135deg,#a02050,#c03060);color:#fff;border:none;border-radius:4px;font-family:'Noto Serif KR',serif;font-size:13px;letter-spacing:3px;cursor:pointer;font-weight:500;box-shadow:0 4px 20px rgba(192,48,96,0.4);margin-bottom:10px;width:100%;max-width:280px}
+        .gate-btn{padding:14px 32px;background:linear-gradient(135deg,#a02050,#c03060);color:#fff;border:none;border-radius:4px;font-family:'Noto Serif KR',serif;font-size:13px;letter-spacing:3px;cursor:pointer;font-weight:500;box-shadow:0 4px 20px rgba(192,48,96,0.4);margin-bottom:10px;width:100%;max-width:300px}
         .gate-leave{padding:10px;background:transparent;border:none;color:rgba(255,220,230,0.5);font-family:sans-serif;font-size:11px;cursor:pointer;letter-spacing:1px}
+        .gate-form{margin-bottom:16px;width:100%;max-width:300px}
+        .gate-label{display:block;font-family:sans-serif;font-size:11px;color:rgba(255,200,210,0.7);letter-spacing:2px;margin-bottom:8px;text-align:left}
+        .gate-ymd{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:8px}
+        .gate-ymd select{padding:11px 10px;background:rgba(20,8,12,0.8);border:1px solid rgba(180,60,100,0.35);border-radius:4px;color:#f0d8e0;font-family:inherit;font-size:13px;cursor:pointer;outline:none;appearance:none;-webkit-appearance:none;padding-right:24px;background-image:url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3e%3cpath d='M1 1l4 4 4-4' stroke='%23d06080' stroke-width='1.5' fill='none'/%3e%3c/svg%3e");background-repeat:no-repeat;background-position:right 8px center}
+        .gate-ymd select:focus{border-color:rgba(220,100,140,0.7)}
+        .gate-err{font-family:sans-serif;font-size:11px;color:#ff7090;padding:8px 12px;background:rgba(200,40,80,0.12);border:1px solid rgba(200,60,100,0.3);border-radius:4px;margin-bottom:14px;max-width:300px;width:100%;text-align:center}
+        .gate-login-ok{font-family:sans-serif;font-size:12px;color:#80e0a0;padding:10px 14px;background:rgba(80,200,140,0.1);border:1px solid rgba(100,220,160,0.25);border-radius:6px;margin-bottom:18px;max-width:300px;width:100%;text-align:center;letter-spacing:0.5px}
+        .gate-login-hint{font-family:sans-serif;font-size:10px;color:rgba(255,220,230,0.45);margin-top:10px;letter-spacing:0.5px}
+        .gate-loading{font-family:sans-serif;font-size:12px;color:rgba(255,200,210,0.6);padding:14px 0;text-align:center;letter-spacing:1px}
+        .gate-ok-big{font-size:13px !important;padding:14px !important}
+        .gate-auto-text{font-size:10px;color:rgba(120,220,160,0.7);display:block;margin-top:4px}
 
         .intro{text-align:center;margin-bottom:24px}
         .intro-avatar{width:130px;height:130px;margin:0 auto 14px;border-radius:50%;overflow:hidden;border:2px solid rgba(192,48,96,0.5);box-shadow:0 0 30px rgba(192,48,96,0.45)}
@@ -301,16 +396,63 @@ export default function MilseoPage() {
         <div className="content">
           {stage === "gate" && (
             <div className="gate">
-              <div className="gate-mark">19+</div>
-              <div className="gate-title">밀서 (密書)</div>
+              <div className="gate-mark">19</div>
+              <div className="gate-title">성인 인증</div>
               <div className="gate-warn">
-                <b>이 풀이는 19세 이상만 이용할 수 있습니다.</b><br/><br/>
-                밀서는 사주를 바탕으로<br/>
-                숨겨진 욕망 · 매력 · 은밀한 인연을 풀어드립니다.<br/><br/>
-                노골적 표현은 없으나<br/>
-                성인의 시선으로 쓰여진 글이니 양해 부탁드립니다.
+                <b>밀서(密書)는 만 19세 이상 성인 전용 콘텐츠입니다.</b><br/><br/>
+                사주를 바탕으로 숨겨진 욕망 · 매력 ·<br/>
+                은밀한 인연을 풀어드립니다.<br/><br/>
+                <b>1차: 본인 인증</b> — 카카오/구글 로그인으로 본인 확인<br/>
+                <b>2차: 연령 인증</b> — 카카오는 자동 확인, 그 외는 생년월일 입력<br/><br/>
+                허위 정보 입력 시 법적 책임은 본인에게 있습니다.
               </div>
-              <button className="gate-btn" onClick={enterGate}>19세 이상입니다 · 입장</button>
+              {isLoggedIn ? (
+                <>
+                  {kakaoAutoVerified ? (
+                    <>
+                      <div className="gate-login-ok gate-ok-big">
+                        ✓ {session?.user?.nickname || session?.user?.name} 님<br/>
+                        <span className="gate-auto-text">카카오 인증으로 만 19세 이상 확인 완료</span>
+                      </div>
+                      <button className="gate-btn" onClick={verifyGate}>자동 인증 완료 · 입장</button>
+                    </>
+                  ) : (
+                    <>
+                      <div className="gate-login-ok">
+                        ✓ {session?.user?.nickname || session?.user?.name || session?.user?.email} 님, 본인 인증 완료
+                      </div>
+                      <div className="gate-form">
+                        <label className="gate-label">생년월일 (연령 확인)</label>
+                        <div className="gate-ymd">
+                          <select value={gateYear} onChange={(e) => setGateYear(e.target.value)}>
+                            <option value="">년</option>
+                            {gateYears.map((y) => <option key={y} value={y}>{y}년</option>)}
+                          </select>
+                          <select value={gateMonth} onChange={(e) => setGateMonth(e.target.value)}>
+                            <option value="">월</option>
+                            {gateMonths.map((m) => <option key={m} value={m}>{Number(m)}월</option>)}
+                          </select>
+                          <select value={gateDay} onChange={(e) => setGateDay(e.target.value)}>
+                            <option value="">일</option>
+                            {gateDays.map((d) => <option key={d} value={d}>{Number(d)}일</option>)}
+                          </select>
+                        </div>
+                      </div>
+                      {gateError && <div className="gate-err">{gateError}</div>}
+                      <button className="gate-btn" onClick={verifyGate}>연령 확인 완료 · 입장</button>
+                    </>
+                  )}
+                </>
+              ) : status === "loading" ? (
+                <div className="gate-loading">인증 상태 확인 중…</div>
+              ) : (
+                <>
+                  <button className="gate-btn" onClick={() => router.push("/login?callbackUrl=/milseo")}>
+                    카카오 / 구글 로그인으로 본인 인증
+                  </button>
+                  <p className="gate-login-hint">로그인 후 생년월일 인증을 진행합니다</p>
+                </>
+              )}
               <button className="gate-leave" onClick={() => router.push("/")}>← 돌아가기</button>
             </div>
           )}
@@ -388,6 +530,35 @@ export default function MilseoPage() {
                     </div>
                   </div>
                 </div>
+                <div>
+                  <label>출생지 (진태양시 보정)</label>
+                  <select
+                    value={form.city}
+                    onChange={(e) => {
+                      const city = CITIES.find((c) => c.name === e.target.value);
+                      if (city) {
+                        update("city", city.name);
+                        update("longitude", city.longitude <= 0 ? "" : String(city.longitude));
+                      }
+                    }}
+                  >
+                    {CITIES.map((c) => (
+                      <option key={c.name} value={c.name}>{c.name}</option>
+                    ))}
+                  </select>
+                  {form.city === "직접 입력" && (
+                    <input
+                      type="number"
+                      step="0.01"
+                      min="0" max="360"
+                      placeholder="경도 (예: 126.98)"
+                      value={form.longitude}
+                      onChange={(e) => update("longitude", e.target.value)}
+                      style={{ marginTop: 8 }}
+                    />
+                  )}
+                  <div className="hint">출생지 경도로 진태양시를 보정합니다 · 미선택 시 한국 표준시(KST) 사용</div>
+                </div>
                 {error && <div className="err">{error}</div>}
                 <button type="submit" className="submit">
                   {pendingChapterId
@@ -416,7 +587,7 @@ export default function MilseoPage() {
                 <div className="summary-bar">
                   <div className="summary-info">
                     <div className="summary-name">{form.name} 님</div>
-                    <div className="summary-meta">{birthdate} · {form.calendar} · {timeStr || "시 미상"} · {form.gender}</div>
+                    <div className="summary-meta">{birthdate} · {form.calendar} · {timeStr || "시 미상"} · {form.gender}{form.city && form.city !== "선택 안 함 (KST)" ? ` · ${form.city}` : ""}</div>
                   </div>
                   <button className="summary-edit" onClick={editForm}>수정</button>
                 </div>

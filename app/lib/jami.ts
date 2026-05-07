@@ -1,4 +1,5 @@
 import { astro } from "iztro";
+import { applyTrueSolarTime } from "./saju";
 
 export interface JamiInput {
   birthdate: string;
@@ -7,6 +8,8 @@ export interface JamiInput {
   calendar: "양력" | "음력";
   isLeapMonth?: boolean;
   gender: "여성" | "남성";
+  /** 출생지 경도 (예: 서울 126.98, 부산 129.08). 미입력 시 한국 표준시 그대로 사용 */
+  longitude?: number;
 }
 
 export interface JamiPalace {
@@ -28,6 +31,8 @@ export interface JamiChart {
   zodiac: string;
   sign: string;
   palaces: JamiPalace[];
+  /** 진태양시 보정 적용 여부 및 보정 시각 */
+  correctedTime?: string;
 }
 
 const hourToTimeIndex = (hour: number): number => {
@@ -36,7 +41,9 @@ const hourToTimeIndex = (hour: number): number => {
 };
 
 export function calcJami(input: JamiInput): JamiChart {
-  const timeIndex = hourToTimeIndex(input.hour);
+  // 진태양시 보정 적용
+  const { hour, minute } = applyTrueSolarTime(input.hour, input.minute, input.longitude);
+  const timeIndex = hourToTimeIndex(hour);
   const genderName = input.gender === "남성" ? "男" : "女";
 
   const a = input.calendar === "음력"
@@ -52,6 +59,9 @@ export function calcJami(input: JamiInput): JamiChart {
     bodyPalaceBranch: a.earthlyBranchOfBodyPalace,
     zodiac: a.zodiac,
     sign: a.sign,
+    correctedTime: input.longitude !== undefined && input.longitude !== null
+      ? `${String(hour).padStart(2,"0")}:${String(minute).padStart(2,"0")}`
+      : undefined,
     palaces: a.palaces.map((p) => ({
       name: p.name,
       ganzhi: `${p.heavenlyStem}${p.earthlyBranch}`,
@@ -76,6 +86,10 @@ export function formatJamiForPrompt(chart: JamiChart): string {
     return `${p.name}궁(${p.ganzhi})${flags} 주성:${major}${minor}`;
   }).join("\n");
 
+  const tstNote = chart.correctedTime
+    ? `\n- ⚠ 진태양시(眞太陽時) 보정 적용됨: 보정시각 ${chart.correctedTime}`
+    : "";
+
   return `[자미두수 명반 (정밀 계산)]
 - 양력: ${chart.solar}
 - 음력: ${chart.lunar}
@@ -83,7 +97,7 @@ export function formatJamiForPrompt(chart: JamiChart): string {
 - 오행국: ${chart.fiveElementsClass}
 - 명궁(命宮) 지지: ${chart.soulPalaceBranch}
 - 신궁(身宮) 지지: ${chart.bodyPalaceBranch}
-- 띠: ${chart.zodiac}, 별자리: ${chart.sign}
+- 띠: ${chart.zodiac}, 별자리: ${chart.sign}${tstNote}
 
 [12궁 배치]
 ${palacesStr}`;

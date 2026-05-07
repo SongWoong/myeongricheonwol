@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
       model: "claude-haiku-4-5-20251001",
       max_tokens: cards.length === 1
         ? 700
-        : Math.min(1200 + cards.length * 450, 5500),
+        : Math.min(1500 + cards.length * 650, 8000),
       messages: [
         {
           role: "user",

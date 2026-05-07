@@ -5,10 +5,32 @@ import { LIMITS, checkLimit, recordUsage, saveResult, loadResult } from "@/app/l
 import { JAMI_CHAPTERS, type JamiChapterDef } from "@/app/lib/jami-chapters";
 import { ShareButtons } from "@/app/components/ShareButtons";
 
+/** 한국 주요 도시의 경도 데이터 (진태양시 보정용) */
+const CITIES: { name: string; longitude: number }[] = [
+  { name: "선택 안 함 (KST)", longitude: 0 },
+  { name: "서울 (126.98°)", longitude: 126.98 },
+  { name: "부산 (129.08°)", longitude: 129.08 },
+  { name: "인천 (126.70°)", longitude: 126.70 },
+  { name: "대구 (128.60°)", longitude: 128.60 },
+  { name: "대전 (127.38°)", longitude: 127.38 },
+  { name: "광주 (126.85°)", longitude: 126.85 },
+  { name: "울산 (129.31°)", longitude: 129.31 },
+  { name: "수원 (127.03°)", longitude: 127.03 },
+  { name: "춘천 (127.73°)", longitude: 127.73 },
+  { name: "청주 (127.49°)", longitude: 127.49 },
+  { name: "전주 (127.15°)", longitude: 127.15 },
+  { name: "제주 (126.53°)", longitude: 126.53 },
+  { name: "평양 (125.75°)", longitude: 125.75 },
+  { name: "도쿄 (139.69°)", longitude: 139.69 },
+  { name: "베이징 (116.41°)", longitude: 116.41 },
+  { name: "직접 입력", longitude: -1 },
+];
+
 type Stage = "chapters" | "form";
 type FormState = {
   name: string; year: string; month: string; day: string;
   hour: string; minute: string; gender: string; calendar: string;
+  city: string; longitude: string;
 };
 
 const IS_DEV = process.env.NODE_ENV === "development";
@@ -25,7 +47,7 @@ export default function JamiPage() {
   const [pendingChapterId, setPendingChapterId] = useState<string | null>(null);
   const [form, setForm] = useState<FormState>({
     name: "", year: "", month: "", day: "", hour: "", minute: "00",
-    gender: "여성", calendar: "양력",
+    gender: "여성", calendar: "양력", city: "", longitude: "",
   });
 
   useEffect(() => {
@@ -89,7 +111,7 @@ export default function JamiPage() {
   };
 
   const generateChapter = async (chapter: JamiChapterDef) => {
-    if (chapter.price === 0) {
+    if (!IS_DEV && chapter.price === 0) {
       const fresh = checkLimit(LIMITS.jami);
       if (!fresh.allowed) {
         setError(`'${chapter.title}' 무료 풀이를 올해 이미 보셨습니다. ${fresh.resetText}`);
@@ -111,6 +133,7 @@ export default function JamiPage() {
           hour: Number(form.hour), minute: Number(form.minute) || 0,
           gender: form.gender, calendar: form.calendar,
           chapterId: chapter.id,
+          longitude: form.longitude ? Number(form.longitude) : undefined,
         }),
       });
       const data = await res.json();
@@ -143,6 +166,7 @@ export default function JamiPage() {
           hour: Number(form.hour), minute: Number(form.minute) || 0,
           gender: form.gender, calendar: form.calendar,
           chapterId: chapter.id,
+          longitude: form.longitude ? Number(form.longitude) : undefined,
         }),
       });
       const data = await res.json();
@@ -353,6 +377,35 @@ export default function JamiPage() {
                     </div>
                   </div>
                 </div>
+                <div>
+                  <label>출생지 (진태양시 보정)</label>
+                  <select
+                    value={form.city}
+                    onChange={(e) => {
+                      const city = CITIES.find((c) => c.name === e.target.value);
+                      if (city) {
+                        update("city", city.name);
+                        update("longitude", city.longitude <= 0 ? "" : String(city.longitude));
+                      }
+                    }}
+                  >
+                    {CITIES.map((c) => (
+                      <option key={c.name} value={c.name}>{c.name}</option>
+                    ))}
+                  </select>
+                  {form.city === "직접 입력" && (
+                    <input
+                      type="number"
+                      step="0.01"
+                      min="0" max="360"
+                      placeholder="경도 (예: 126.98)"
+                      value={form.longitude}
+                      onChange={(e) => update("longitude", e.target.value)}
+                      style={{ marginTop: 8 }}
+                    />
+                  )}
+                  <div className="hint">출생지 경도로 진태양시를 보정합니다 · 미선택 시 한국 표준시(KST) 사용</div>
+                </div>
                 {error && <div className="err">{error}</div>}
                 <button type="submit" className="submit">
                   {pendingChapterId
@@ -381,7 +434,7 @@ export default function JamiPage() {
                 <div className="summary-bar">
                   <div className="summary-info">
                     <div className="summary-name">{form.name} 님</div>
-                    <div className="summary-meta">{birthdate} · {form.calendar} · {timeStr || "시 미상"} · {form.gender}</div>
+                    <div className="summary-meta">{birthdate} · {form.calendar} · {timeStr || "시 미상"} · {form.gender}{form.city && form.city !== "선택 안 함 (KST)" ? ` · ${form.city}` : ""}</div>
                   </div>
                   <button className="summary-edit" onClick={editForm}>수정</button>
                 </div>

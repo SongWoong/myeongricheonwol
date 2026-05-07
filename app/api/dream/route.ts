@@ -13,6 +13,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "꿈 내용이 너무 짧습니다" }, { status: 400 });
     }
 
+    const dreamText = dream.trim().slice(0, 1000);
+    const now = new Date();
+    const todayStr = `${now.getFullYear()}년 ${now.getMonth() + 1}월 ${now.getDate()}일`;
+
     const message = await client.messages.create({
       model: "claude-haiku-4-5-20251001",
       max_tokens: 1500,
@@ -23,7 +27,9 @@ export async function POST(req: NextRequest) {
 아래 꿈 내용을 바탕으로 그 꿈에 담긴 상징과 의미를 풀이해주세요.
 
 [꿈 내용]
-${dream.trim().slice(0, 1000)}
+${dreamText}
+
+[오늘 날짜: ${todayStr}]
 
 다음 항목으로 나눠서 풀이해주세요:
 

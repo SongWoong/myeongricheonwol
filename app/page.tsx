@@ -1,9 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSession, signOut } from "next-auth/react";
 import { HomeDesktop } from "@/app/components/HomeDesktop";
 export default function Home() {
   const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
+  const { data: session } = useSession();
   useEffect(() => {
     const check = () => setIsDesktop(window.innerWidth >= 768);
     check();
@@ -29,15 +31,16 @@ export default function Home() {
   if (isDesktop === null) return <div style={{background:"#060410",minHeight:"100dvh"}}/>;
   return isDesktop
     ? <HomeDesktop characters={characters} />
-    : <MobileHome characters={characters} tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} router={router} />;
+    : <MobileHome characters={characters} tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} router={router} session={session} />;
 }
 
-function MobileHome({ characters, tabs, activeTab, setActiveTab, router }: {
+function MobileHome({ characters, tabs, activeTab, setActiveTab, router, session }: {
   characters: { id: string; name: string; hanja: string; role: string; desc: string; tag: string; adult: boolean; image: string; color: string }[];
   tabs: { id: string; icon: string; label: string; free: boolean; path: string }[];
   activeTab: string;
   setActiveTab: (s: string) => void;
   router: ReturnType<typeof useRouter>;
+  session: ReturnType<typeof useSession>["data"];
 }) {
   return (
     <>
@@ -117,7 +120,13 @@ function MobileHome({ characters, tabs, activeTab, setActiveTab, router }: {
       <div className="app">
         <header>
           <div><div className="logo">命理天月</div><div className="logo-sub">MYEONGRICHEONWOL</div></div>
-          <button className="btn-login">로그인</button>
+          {session?.user ? (
+            <button className="btn-login" onClick={() => signOut()}>
+              {session.user.nickname || session.user.name || "나의"} ▽
+            </button>
+          ) : (
+            <button className="btn-login" onClick={() => router.push("/login")}>로그인</button>
+          )}
         </header>
         <div className="content">
           <div className="hero">
@@ -157,20 +166,24 @@ function MobileHome({ characters, tabs, activeTab, setActiveTab, router }: {
             </div>
           </div>
           <div className="section duo-section">
-            <div className="sec-tag">✦  合 一  ✦</div>
-            <div className="sec-title">운명의 합주(合奏)</div>
-            <div className="duo-card" onClick={() => router.push("/duo")}>
+            <div className="sec-tag">✦  慧源  ✦</div>
+            <div className="sec-title">AI 통합 상담</div>
+            <div className="duo-card" onClick={() => router.push("/hyewon")}>
               <div className="duo-bg"/>
               <div className="duo-img-wrap">
-                <div className="duo-img-half left"><img src="/char-jawun.png" alt="자운"/></div>
-                <div className="duo-img-half right"><img src="/char-wolryeong.png" alt="월령"/></div>
-                <div className="duo-img-center-fade"/>
+                <div className="duo-img-half left" style={{flex:"unset",width:"100%"}}>
+                  <img src="/char-hyewon.png" alt="혜원"
+                    onError={(e)=>{(e.target as HTMLImageElement).src="/char-wolryeong.png"}}
+                    style={{objectPosition:"center 10%"}}
+                  />
+                </div>
                 <div className="duo-img-bottom-fade"/>
               </div>
               <div className="duo-text">
-                <div className="duo-name">자운 × 월령</div>
-                <div className="duo-desc-line">사주의 깊이와 타로의 직관이<br/>하나의 질문에 함께 답합니다</div>
-                <div className="duo-cta">연애 · 재회 · 궁합 · 돈 · 일  →</div>
+                <div className="duo-name">혜원 · 慧源</div>
+                <div className="duo-sub" style={{fontFamily:"sans-serif",fontSize:10,color:"rgba(255,255,255,0.6)",letterSpacing:3,marginBottom:10}}>사주 · 타로 통합 상담사</div>
+                <div className="duo-desc-line">사주의 흐름과 타로의 직관으로<br/>무엇이든 자유롭게 물어보세요</div>
+                <div className="duo-cta">연애 · 직업 · 재물 · 건강 · 무엇이든 →</div>
               </div>
             </div>
           </div>

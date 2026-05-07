@@ -9,7 +9,7 @@ const client = new Anthropic();
 
 export async function POST(req: NextRequest) {
   try {
-    const { name, birthdate, hour, minute, gender, calendar, chapterId = "general" } = await req.json();
+    const { name, birthdate, hour, minute, gender, calendar, chapterId = "general", longitude } = await req.json();
 
     if (!name || !birthdate || hour === undefined || hour === null) {
       return NextResponse.json({ error: "이름·생년월일·시간 모두 필요합니다" }, { status: 400 });
@@ -26,8 +26,12 @@ export async function POST(req: NextRequest) {
       minute: Number(minute) || 0,
       gender,
       calendar,
+      longitude,
     });
     const block = formatJamiForPrompt(chart);
+
+    const now = new Date();
+    const todayStr = `${now.getFullYear()}년 ${now.getMonth() + 1}월 ${now.getDate()}일`;
 
     const heavy = chapter.id === "general" || chapter.id === "thisyear" || chapter.id === "daewoon";
     const isLight = chapter.id === "thisyear-light";
@@ -44,6 +48,7 @@ export async function POST(req: NextRequest) {
 
 이름: ${name}
 성별: ${gender}
+오늘 날짜: ${todayStr}
 
 ${block}
 

@@ -8,6 +8,8 @@ declare module "next-auth" {
       name?: string | null;
       email?: string | null;
       image?: string | null;
+      ageRange?: string;
+      birthyear?: string;
     };
   }
 }
@@ -18,5 +20,8 @@ declare module "next-auth/jwt" {
     kakaoId?: number;
     nickname?: string;
     profileImage?: string;
+    ageRange?: string;
+    birthyear?: string;
+    birthday?: string;
   }
 }
