@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import { HomeDesktop } from "@/app/components/HomeDesktop";
+import { BusinessInfo } from "@/app/components/BusinessInfo";
 export default function Home() {
   const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
   const { data: session } = useSession();
@@ -189,9 +190,16 @@ function MobileHome({ characters, tabs, activeTab, setActiveTab, router, session
           </div>
           <div className="hfoot">
             <div className="hfoot-links">
+              <span onClick={() => router.push("/pricing")}>이용권 안내</span>
+              {session?.user && (
+                <span onClick={() => router.push("/account/billing")}>내 결제 내역</span>
+              )}
               <span onClick={() => router.push("/terms")}>이용약관</span>
               <span onClick={() => router.push("/privacy")}>개인정보처리방침</span>
               <span onClick={() => router.push("/refund")}>환불정책</span>
+            </div>
+            <div style={{ marginTop: 14, marginBottom: 12, padding: "0 10px" }}>
+              <BusinessInfo compact />
             </div>
             <div className="hfoot-meta">© 2026 명리천월 命理天月 · 풀이는 엔터테인먼트 목적입니다</div>
           </div>

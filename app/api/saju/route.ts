@@ -4,6 +4,7 @@ import { calcSaju, formatSajuForPrompt } from "@/app/lib/saju";
 import { stripMarkdown, NO_MARKDOWN_RULE } from "@/app/lib/sanitize";
 import { getChapter } from "@/app/lib/saju-chapters";
 import { VOICES, voiceBlock } from "@/app/lib/voices";
+import { gateFeature } from "@/app/lib/payment/gate";
 
 const client = new Anthropic();
 
@@ -18,6 +19,13 @@ export async function POST(req: NextRequest) {
     const chapter = getChapter(chapterId);
     if (!chapter) {
       return NextResponse.json({ error: "존재하지 않는 챕터입니다" }, { status: 400 });
+    }
+
+    // 유료 챕터는 권한 게이트 — 챕터별 feature 키 (saju.{id})
+    let gate: Awaited<ReturnType<typeof gateFeature>> | null = null;
+    if (chapter.price > 0) {
+      gate = await gateFeature(`saju.${chapter.id}`);
+      if (!gate.ok) return gate.response;
     }
 
     const chart = calcSaju({ birthdate, time, calendar, gender, longitude });
@@ -59,6 +67,11 @@ ${NO_MARKDOWN_RULE}`,
     });
 
     const raw = message.content[0].type === "text" ? message.content[0].text : "";
+
+    if (gate?.ok) {
+      try { await gate.consume(); } catch (e) { console.error("[saju] consume credit failed", e); }
+    }
+
     return NextResponse.json({ result: stripMarkdown(raw), chart: chart.formatted, chapterId });
   } catch (err) {
     console.error("[/api/saju]", err);

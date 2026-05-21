@@ -27,7 +27,7 @@ export const SAJU_CHAPTERS: ChapterDef[] = [
 너무 길지 않게, 핵심만 부드럽게 전해주세요.`,
   },
   {
-    id: "general", icon: "命", title: "종합 풀이", desc: "사주 총평 · 대운 흐름 · 올해 운세", price: 1900,
+    id: "general", icon: "命", title: "종합 풀이", desc: "사주 총평 · 대운 흐름 · 올해 운세", price: 7900,
     promptTitle: "사주 종합",
     promptInstruction: `다음 8개 항목으로 작성하세요:
 
@@ -41,7 +41,7 @@ export const SAJU_CHAPTERS: ChapterDef[] = [
 ✦ 이달의 행운 키워드 (색·방위·숫자·단어 3개)`,
   },
   {
-    id: "love", icon: "緣", title: "사랑·인연", desc: "연애·결혼·배우자·궁합", price: 1900,
+    id: "love", icon: "緣", title: "사랑·인연", desc: "연애·결혼·배우자·궁합", price: 2900,
     promptTitle: "사랑과 인연",
     promptInstruction: `다음 항목으로 자세히 풀어주세요:
 
@@ -54,7 +54,7 @@ export const SAJU_CHAPTERS: ChapterDef[] = [
 ✦ 사랑의 키워드 3개`,
   },
   {
-    id: "money", icon: "財", title: "재물·금전", desc: "재산·투자·소비·돈의 흐름", price: 1900,
+    id: "money", icon: "財", title: "재물·금전", desc: "재산·투자·소비·돈의 흐름", price: 2900,
     promptTitle: "재물과 금전",
     promptInstruction: `다음 항목으로 자세히 풀어주세요:
 
@@ -67,7 +67,7 @@ export const SAJU_CHAPTERS: ChapterDef[] = [
 ✦ 금전의 키워드 3개`,
   },
   {
-    id: "career", icon: "職", title: "직업·진로", desc: "적성·이직·승진·자영업", price: 1900,
+    id: "career", icon: "職", title: "직업·진로", desc: "적성·이직·승진·자영업", price: 2900,
     promptTitle: "직업과 진로",
     promptInstruction: `다음 항목으로 자세히 풀어주세요:
 
@@ -80,7 +80,7 @@ export const SAJU_CHAPTERS: ChapterDef[] = [
 ✦ 진로의 키워드 3개`,
   },
   {
-    id: "health", icon: "康", title: "건강·체질", desc: "체질·약한 부위·관리법", price: 1900,
+    id: "health", icon: "康", title: "건강·체질", desc: "체질·약한 부위·관리법", price: 2900,
     promptTitle: "건강과 체질",
     promptInstruction: `다음 항목으로 자세히 풀어주세요:
 
@@ -93,7 +93,7 @@ export const SAJU_CHAPTERS: ChapterDef[] = [
 ✦ 건강의 키워드 3개`,
   },
   {
-    id: "family", icon: "家", title: "가족·자녀", desc: "부모·형제·배우자·자녀운", price: 1900,
+    id: "family", icon: "家", title: "가족·자녀", desc: "부모·형제·배우자·자녀운", price: 2900,
     promptTitle: "가족과 자녀",
     promptInstruction: `다음 항목으로 자세히 풀어주세요:
 
@@ -106,7 +106,7 @@ export const SAJU_CHAPTERS: ChapterDef[] = [
 ✦ 가족의 키워드 3개`,
   },
   {
-    id: "daewoon", icon: "運", title: "대운 자세히", desc: "10년 단위 인생 큰 흐름", price: 2900,
+    id: "daewoon", icon: "運", title: "대운 자세히", desc: "10년 단위 인생 큰 흐름", price: 7900,
     promptTitle: "대운(大運) 흐름 자세히",
     promptInstruction: `현재 대운과 앞으로의 대운 흐름을 자세히 풀어주세요:
 
@@ -129,7 +129,7 @@ export const SAJU_CHAPTERS: ChapterDef[] = [
 (각 시기에 어떻게 살면 좋은지)`,
   },
   {
-    id: "thisyear", icon: "歲", title: "올해 자세히", desc: "올해 12개월 월별 흐름", price: 1900,
+    id: "thisyear", icon: "歲", title: "올해 자세히", desc: "올해 12개월 월별 흐름", price: 4900,
     promptTitle: "올해 운세 자세히",
     promptInstruction: `올해 한 해의 흐름을 월별로 자세히 풀어주세요:
 

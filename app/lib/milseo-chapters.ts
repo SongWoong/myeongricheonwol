@@ -26,7 +26,7 @@ export const MILSEO_CHAPTERS: MilseoChapterDef[] = [
 은유적이고 살짝 신비롭게, 너무 길지 않게.`,
   },
   {
-    id: "desire", icon: "慾", title: "숨겨진 욕망", desc: "본인이 모르는 본능의 결", price: 1900,
+    id: "desire", icon: "慾", title: "숨겨진 욕망", desc: "본인이 모르는 본능의 결", price: 4900,
     promptTitle: "숨겨진 욕망",
     promptInstruction: `사주의 일지·재성·식상을 중심으로 그대 안에 숨겨진 본능을 읽어주세요:
 
@@ -39,7 +39,7 @@ export const MILSEO_CHAPTERS: MilseoChapterDef[] = [
 노골적 표현은 피하고 은유로. 그러나 흐릿하지 말고 구체적 상황·감정·순간을 짚어주세요.`,
   },
   {
-    id: "charm", icon: "艶", title: "매력의 비밀", desc: "사람을 끄는 진짜 무기", price: 1900,
+    id: "charm", icon: "艶", title: "매력의 비밀", desc: "사람을 끄는 진짜 무기", price: 4900,
     promptTitle: "매력의 비밀",
     promptInstruction: `그대가 사람을 끄는 진짜 매력을 깊이 풀어주세요:
 
@@ -53,7 +53,7 @@ export const MILSEO_CHAPTERS: MilseoChapterDef[] = [
 구체적 장면·동작·표정으로 묘사. "긍정적 에너지" 같은 추상적 표현 금지.`,
   },
   {
-    id: "danger", icon: "緣", title: "위험한 인연", desc: "끌리지만 다치는 상대", price: 1900,
+    id: "danger", icon: "緣", title: "위험한 인연", desc: "끌리지만 다치는 상대", price: 4900,
     promptTitle: "위험한 인연",
     promptInstruction: `그대를 흔들 위험한 인연을 알려주세요:
 
@@ -67,7 +67,7 @@ export const MILSEO_CHAPTERS: MilseoChapterDef[] = [
 ✦ 키워드 3개`,
   },
   {
-    id: "intimate", icon: "蜜", title: "친밀한 별자", desc: "관계의 깊은 결과 호환", price: 2900,
+    id: "intimate", icon: "蜜", title: "친밀한 별자", desc: "관계의 깊은 결과 호환", price: 7900,
     promptTitle: "친밀한 별자 (사주로 본 친밀 관계)",
     promptInstruction: `사주로 본 친밀한 관계의 결을 풀어주세요:
 
@@ -83,7 +83,7 @@ export const MILSEO_CHAPTERS: MilseoChapterDef[] = [
 은유적이지만 구체적으로. 노골적 표현 금지, 어른스럽게.`,
   },
   {
-    id: "secret", icon: "秘", title: "은밀한 만남", desc: "외도·짝사랑·비밀 연애", price: 1900,
+    id: "secret", icon: "秘", title: "은밀한 만남", desc: "외도·짝사랑·비밀 연애", price: 4900,
     promptTitle: "은밀한 만남",
     promptInstruction: `숨겨진 인연·관계의 그림자를 풀어주세요:
 
@@ -97,7 +97,7 @@ export const MILSEO_CHAPTERS: MilseoChapterDef[] = [
 ✦ 키워드 3개`,
   },
   {
-    id: "karma", icon: "宿", title: "전생의 인연", desc: "운명적 끌림과 카르마", price: 1900,
+    id: "karma", icon: "宿", title: "전생의 인연", desc: "운명적 끌림과 카르마", price: 4900,
     promptTitle: "전생의 인연",
     promptInstruction: `사주에 새겨진 운명적 끌림을 풀어주세요:
 

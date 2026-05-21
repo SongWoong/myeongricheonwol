@@ -2,6 +2,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest, NextResponse } from "next/server";
 import { stripMarkdown, NO_MARKDOWN_RULE } from "@/app/lib/sanitize";
 import { VOICES, voiceBlock } from "@/app/lib/voices";
+import { gateFeature } from "@/app/lib/payment/gate";
 
 const client = new Anthropic();
 
@@ -21,6 +22,13 @@ export async function POST(req: NextRequest) {
 
     if (!question || !cards || cards.length === 0) {
       return NextResponse.json({ error: "질문과 카드가 필요합니다" }, { status: 400 });
+    }
+
+    // single(1장)은 무료. ppf/celtic 은 유료 — 스프레드별 feature 키로 게이트.
+    let gate: Awaited<ReturnType<typeof gateFeature>> | null = null;
+    if (spread && spread.id !== "single") {
+      gate = await gateFeature(`tarot.${spread.id}`);
+      if (!gate.ok) return gate.response;
     }
 
     const cardsBlock = cards.map((c, i) => {
@@ -113,6 +121,11 @@ ${NO_MARKDOWN_RULE}`,
     });
 
     const raw = message.content[0].type === "text" ? message.content[0].text : "";
+
+    if (gate?.ok) {
+      try { await gate.consume(); } catch (e) { console.error("[tarot] consume credit failed", e); }
+    }
+
     return NextResponse.json({ result: stripMarkdown(raw) });
   } catch (err) {
     console.error("[/api/tarot]", err);

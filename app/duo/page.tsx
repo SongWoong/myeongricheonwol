@@ -13,7 +13,8 @@ type FormState = {
 type DuoCard = { position: string; nameKo: string; nameEn: string; image: string; reversed: boolean };
 type DuoResult = { topic: DuoTopic; question: string; result: string; cards: DuoCard[] };
 
-const IS_DEV = process.env.NODE_ENV === "development";
+// 듀오는 아직 별도 상품/게이트 없음 — 항상 열림 (추후 결제 연결 예정)
+const IS_DEV = true;
 
 export default function DuoPage() {
   const router = useRouter();

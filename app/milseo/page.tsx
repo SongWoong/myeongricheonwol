@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { LIMITS, checkLimit, recordUsage, saveResult, loadResult } from "@/app/lib/limits";
 import { MILSEO_CHAPTERS, type MilseoChapterDef } from "@/app/lib/milseo-chapters";
 import { ShareButtons } from "@/app/components/ShareButtons";
+import { useEntitlements, canUnlock, chapterStatus } from "@/app/lib/payment/useEntitlements";
 
 /** 한국 주요 도시의 경도 데이터 (진태양시 보정용) */
 const CITIES: { name: string; longitude: number }[] = [
@@ -34,7 +35,7 @@ type FormState = {
   city: string; longitude: string;
 };
 
-const IS_DEV = process.env.NODE_ENV === "development";
+const IS_DEV_ENV = process.env.NODE_ENV === "development";
 const GATE_KEY = "milseo_age_verified";
 const GATE_EXPIRY_HOURS = 24; // 24시간 후 재인증 필요
 
@@ -42,6 +43,8 @@ export default function MilseoPage() {
   const router = useRouter();
   const { data: session, status } = useSession();
   const isLoggedIn = status === "authenticated";
+  const ents = useEntitlements();
+  const milseoSubStatus = ents.byFeature["milseo"];
 
   /** 카카오 로그인 시 age_range로 성인 여부 확인 */
   const kakaoAgeRange = (session?.user as { ageRange?: string } | undefined)?.ageRange;
@@ -193,9 +196,15 @@ export default function MilseoPage() {
         setError(`'${chapter.title}' 무료 풀이를 올해 이미 보셨습니다. ${fresh.resetText}`);
         return;
       }
-    } else if (!IS_DEV) {
-      setError(`'${chapter.title}'은(는) 유료 챕터입니다 (구현 예정)`);
-      return;
+    } else {
+      if (!canUnlock(ents, `milseo.${chapter.id}`)) {
+        if (!ents.loggedIn) {
+          router.push(`/login?callbackUrl=/milseo`);
+          return;
+        }
+        router.push(`/checkout/milseo.${chapter.id}`);
+        return;
+      }
     }
     setError("");
     setLoadingChapter(chapter.id);
@@ -219,6 +228,8 @@ export default function MilseoPage() {
       if (chapter.price === 0) {
         recordUsage(LIMITS.milseo);
         setGeneralLimit(checkLimit(LIMITS.milseo));
+      } else {
+        ents.refresh();
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "알 수 없는 오류");
@@ -612,9 +623,15 @@ export default function MilseoPage() {
                           {ch.title}
                           {hasResult && <span className="chapter-badge badge-done">✓ 풀이 완료</span>}
                           {!hasResult && isFree && <span className="chapter-badge badge-free">무료</span>}
-                          {!hasResult && !isFree && (
-                            <span className="chapter-badge badge-paid">{IS_DEV ? "[DEV] 무료" : "유료"}</span>
-                          )}
+                          {!hasResult && !isFree && (() => {
+                            const cs = chapterStatus(ents, "milseo", ch.id);
+                            const label = cs.reason === 'bypass' ? "[DEV] 무료"
+                              : cs.reason === 'unlimited' ? "구독중"
+                              : cs.reason === 'chapter-credit' ? "결제완료"
+                              : cs.reason === 'pack-credit' ? `풀팩 ${cs.remaining}회 남음`
+                              : `${ch.price.toLocaleString()}원`;
+                            return <span className="chapter-badge badge-paid">{label}</span>;
+                          })()}
                         </div>
                         <div className="chapter-desc">{ch.desc}</div>
                       </div>
@@ -647,16 +664,18 @@ export default function MilseoPage() {
                                             <div className="recommend-name">{rec.title}</div>
                                             <div className="recommend-desc-sm">{rec.desc}</div>
                                           </div>
-                                          <span className="recommend-cta">{IS_DEV ? "[DEV] 보기" : "유료 ›"}</span>
+                                          <span className="recommend-cta">
+                                            {canUnlock(ents, `milseo.${rec.id}`) ? "보기 ›" : `${rec.price.toLocaleString()}원 ›`}
+                                          </span>
                                         </div>
                                       );
                                     })}
                                   </div>
                                 </div>
                               )}
-                              {IS_DEV && (
+                              {(IS_DEV_ENV || ents.bypassed || milseoSubStatus?.unlimited) && (
                                 <div className="chapter-actions">
-                                  <button onClick={() => regenerate(ch)}>🔄 [DEV] 다시 받기</button>
+                                  <button onClick={() => regenerate(ch)}>🔄 다시 받기</button>
                                 </div>
                               )}
                             </>

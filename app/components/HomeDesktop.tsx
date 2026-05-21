@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
+import { BusinessInfo } from "@/app/components/BusinessInfo";
 
 interface CharacterDef {
   id: string;
@@ -211,9 +212,14 @@ export function HomeDesktop({ characters }: Props) {
         <div className="d-footer-brand">命理天月</div>
         <div className="d-footer-links">
           <span onClick={() => router.push("/replay")}>보관함</span>
+          <span onClick={() => router.push("/pricing")}>이용권 안내</span>
+          <span onClick={() => router.push("/account/billing")}>내 결제 내역</span>
           <span onClick={() => router.push("/terms")}>이용약관</span>
           <span onClick={() => router.push("/privacy")}>개인정보처리방침</span>
           <span onClick={() => router.push("/refund")}>환불정책</span>
+        </div>
+        <div style={{ marginTop: 12, marginBottom: 10 }}>
+          <BusinessInfo compact />
         </div>
         <div className="d-footer-meta">© 2026 · 엔터테인먼트 목적</div>
       </footer>

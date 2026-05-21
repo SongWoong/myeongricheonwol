@@ -12,6 +12,7 @@
     "@anthropic-ai/sdk": "^0.90.0",
     "@auth/core": "^0.34.3",
     "@supabase/supabase-js": "^2.104.1",
+    "@tosspayments/payment-sdk": "^1.9.2",
     "iztro": "^2.5.8",
     "lunar-typescript": "^1.8.6",
     "next": "16.2.4",

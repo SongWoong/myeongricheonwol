@@ -41,8 +41,8 @@ export async function POST(req: NextRequest) {
         const chart = calcSaju({
           birthdate: profile.birthdate,
           time: profile.time,
-          calendar: profile.calendar,
-          gender: profile.gender,
+          calendar: profile.calendar as "양력" | "음력",
+          gender: profile.gender as "여성" | "남성",
         });
         sajuBlock = `
 [사주 명식 — 만세력 정밀 계산 완료]
@@ -57,8 +57,8 @@ ${formatSajuForPrompt(chart)}`;
     const drawnCards = shuffleAndDraw(3);
     const cardsBlock = drawnCards
       .map(
-        (c, i) =>
-          `[카드 ${i + 1}] ${c.nameKo} (${c.nameEn}) — ${c.reversed ? "역방향" : "정방향"}\n  정방향: ${c.upright}\n  역방향: ${c.reversedMeaning}\n  키워드: ${c.keywords.join(", ")}`
+        (d, i) =>
+          `[카드 ${i + 1}] ${d.card.nameKo} (${d.card.nameEn}) — ${d.reversed ? "역방향" : "정방향"}\n  정방향: ${d.card.upright}\n  역방향: ${d.card.reversed}\n  키워드: ${d.card.keywords.join(", ")}`
       )
       .join("\n\n");
 
@@ -95,11 +95,11 @@ ${NO_MARKDOWN_RULE}`;
 
     return NextResponse.json({
       result: stripMarkdown(raw),
-      cards: drawnCards.map((c) => ({
-        nameKo: c.nameKo,
-        nameEn: c.nameEn,
-        image: c.image,
-        reversed: c.reversed,
+      cards: drawnCards.map((d) => ({
+        nameKo: d.card.nameKo,
+        nameEn: d.card.nameEn,
+        image: d.card.image,
+        reversed: d.reversed,
       })),
     });
   } catch (err) {

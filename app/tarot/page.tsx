@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { SPREADS, shuffleAndDraw, type DrawnCard, type SpreadDef } from "@/app/lib/tarot";
 import { ShareButtons } from "@/app/components/ShareButtons";
+import { useEntitlements, canUnlock } from "@/app/lib/payment/useEntitlements";
+
+const SPREAD_PRICES: Record<string, number> = { ppf: 4900, celtic: 7900 };
 
 type Stage = "intro" | "shuffle" | "reveal" | "loading" | "result";
 
@@ -36,6 +39,7 @@ function recordSingleLimit() {
 
 export default function TarotPage() {
   const router = useRouter();
+  const ents = useEntitlements();
   const [stage, setStage] = useState<Stage>("intro");
   const [spread, setSpread] = useState<SpreadDef>(SPREADS[0]);
   const [question, setQuestion] = useState("");
@@ -54,6 +58,16 @@ export default function TarotPage() {
       if (!fresh.allowed) {
         setError("오늘 무료 한 장 풀이를 사용했습니다. 내일 자정에 초기화됩니다.");
         setLimit(fresh);
+        return;
+      }
+    } else {
+      // 유료 스프레드 — 권한 확인 후 없으면 결제로 라우팅
+      if (!canUnlock(ents, `tarot.${spread.id}`)) {
+        if (!ents.loggedIn) {
+          router.push(`/login?callbackUrl=/tarot`);
+          return;
+        }
+        router.push(`/checkout/tarot.${spread.id}`);
         return;
       }
     }
@@ -298,7 +312,10 @@ export default function TarotPage() {
                       <div className="spread-name">{s.name} · {s.count}장</div>
                       <div className="spread-desc">{s.desc}</div>
                       <span className={`spread-badge ${s.free ? "badge-free" : "badge-paid"}`}>
-                        {s.free ? "무료" : "유료"}
+                        {s.free ? "무료"
+                          : ents.bypassed ? "[DEV] 무료"
+                          : canUnlock(ents, `tarot.${s.id}`) ? "이용가능"
+                          : `${(SPREAD_PRICES[s.id] || 0).toLocaleString()}원`}
                       </span>
                     </div>
                   ))}

@@ -27,7 +27,7 @@ export const JAMI_CHAPTERS: JamiChapterDef[] = [
 너무 길지 않게, 핵심만 부드럽게 전해주세요.`,
   },
   {
-    id: "general", icon: "命", title: "종합 명반", desc: "12궁 전체 흐름 + 자미성 인연", price: 1900,
+    id: "general", icon: "命", title: "종합 명반", desc: "12궁 전체 흐름 + 자미성 인연", price: 7900,
     promptTitle: "자미두수 종합 명반",
     promptInstruction: `다음 항목으로 작성하세요:
 
@@ -42,7 +42,7 @@ export const JAMI_CHAPTERS: JamiChapterDef[] = [
 ✦ 일생의 큰 흐름 (오행국 + 명궁 종합)`,
   },
   {
-    id: "love", icon: "緣", title: "사랑·인연", desc: "부처궁 · 결혼 · 배우자상", price: 1900,
+    id: "love", icon: "緣", title: "사랑·인연", desc: "부처궁 · 결혼 · 배우자상", price: 2900,
     promptTitle: "사랑과 인연 (부처궁 자세히)",
     promptInstruction: `부처궁(夫妻宮)을 중심으로 자세히 풀어주세요:
 
@@ -54,7 +54,7 @@ export const JAMI_CHAPTERS: JamiChapterDef[] = [
 ✦ 사랑의 키워드 3개`,
   },
   {
-    id: "money", icon: "財", title: "재물·금전", desc: "재백궁 · 전택궁 · 돈 흐름", price: 1900,
+    id: "money", icon: "財", title: "재물·금전", desc: "재백궁 · 전택궁 · 돈 흐름", price: 2900,
     promptTitle: "재물 (재백궁·전택궁 자세히)",
     promptInstruction: `재백궁(財帛宮)과 전택궁(田宅宮)을 중심으로 풀어주세요:
 
@@ -66,7 +66,7 @@ export const JAMI_CHAPTERS: JamiChapterDef[] = [
 ✦ 금전의 키워드 3개`,
   },
   {
-    id: "career", icon: "職", title: "직업·진로", desc: "관록궁 · 천이궁 · 일의 흐름", price: 1900,
+    id: "career", icon: "職", title: "직업·진로", desc: "관록궁 · 천이궁 · 일의 흐름", price: 2900,
     promptTitle: "직업과 진로 (관록궁 자세히)",
     promptInstruction: `관록궁(官祿宮)과 천이궁(遷移宮)을 중심으로 풀어주세요:
 
@@ -78,7 +78,7 @@ export const JAMI_CHAPTERS: JamiChapterDef[] = [
 ✦ 진로의 키워드 3개`,
   },
   {
-    id: "health", icon: "康", title: "건강·체질", desc: "질액궁 · 신궁 · 약한 부위", price: 1900,
+    id: "health", icon: "康", title: "건강·체질", desc: "질액궁 · 신궁 · 약한 부위", price: 2900,
     promptTitle: "건강과 체질 (질액궁 자세히)",
     promptInstruction: `질액궁(疾厄宮)을 중심으로 풀어주세요:
 
@@ -91,7 +91,7 @@ export const JAMI_CHAPTERS: JamiChapterDef[] = [
 ✦ 건강의 키워드 3개`,
   },
   {
-    id: "family", icon: "家", title: "가족·자녀", desc: "부모 · 형제 · 자녀궁", price: 1900,
+    id: "family", icon: "家", title: "가족·자녀", desc: "부모 · 형제 · 자녀궁", price: 2900,
     promptTitle: "가족과 자녀 (부모/형제/자녀궁)",
     promptInstruction: `부모궁·형제궁·자녀궁을 함께 풀어주세요:
 
@@ -103,7 +103,7 @@ export const JAMI_CHAPTERS: JamiChapterDef[] = [
 ✦ 가족의 키워드 3개`,
   },
   {
-    id: "fortune", icon: "福", title: "복덕·마음", desc: "복덕궁 · 정신 · 취향", price: 1900,
+    id: "fortune", icon: "福", title: "복덕·마음", desc: "복덕궁 · 정신 · 취향", price: 2900,
     promptTitle: "복덕과 마음 (복덕궁 자세히)",
     promptInstruction: `복덕궁(福德宮)을 중심으로 풀어주세요:
 
@@ -115,7 +115,7 @@ export const JAMI_CHAPTERS: JamiChapterDef[] = [
 ✦ 복덕의 키워드 3개`,
   },
   {
-    id: "daewoon", icon: "運", title: "대한 자세히", desc: "10년 단위 인생 큰 흐름", price: 2900,
+    id: "daewoon", icon: "運", title: "대한 자세히", desc: "10년 단위 인생 큰 흐름", price: 7900,
     promptTitle: "대한(大限) 흐름 자세히",
     promptInstruction: `대한(大限) 흐름을 자세히 풀어주세요:
 
@@ -137,7 +137,7 @@ export const JAMI_CHAPTERS: JamiChapterDef[] = [
 ✦ 각 시기의 활용 조언`,
   },
   {
-    id: "thisyear", icon: "歲", title: "올해 자세히", desc: "올해 12개월 월별 흐름", price: 1900,
+    id: "thisyear", icon: "歲", title: "올해 자세히", desc: "올해 12개월 월별 흐름", price: 4900,
     promptTitle: "올해 운세 자세히 (자미두수 유년)",
     promptInstruction: `올해의 흐름을 월별로 자세히 풀어주세요:
 

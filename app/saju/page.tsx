@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { LIMITS, checkLimit, recordUsage, saveResult, loadResult } from "@/app/lib/limits";
 import { SAJU_CHAPTERS, type ChapterDef } from "@/app/lib/saju-chapters";
 import { ShareButtons } from "@/app/components/ShareButtons";
+import { useEntitlements, canUnlock, chapterStatus } from "@/app/lib/payment/useEntitlements";
 
 /** 한국 주요 도시의 경도 데이터 (진태양시 보정용) */
 const CITIES: { name: string; longitude: number }[] = [
@@ -33,10 +34,12 @@ type FormState = {
   city: string; longitude: string;
 };
 
-const IS_DEV = process.env.NODE_ENV === "development";
+const IS_DEV_ENV = process.env.NODE_ENV === "development";
 
 export default function SajuPage() {
   const router = useRouter();
+  const ents = useEntitlements();
+  const sajuSubStatus = ents.byFeature["saju"]; // 구독·풀팩으로 인한 베이스 권한
   const [stage, setStage] = useState<Stage>("chapters");
   const [error, setError] = useState("");
   const [generalLimit, setGeneralLimit] = useState(checkLimit(LIMITS.saju));
@@ -110,15 +113,22 @@ export default function SajuPage() {
   };
 
   const generateChapter = async (chapter: ChapterDef) => {
-    if (!IS_DEV && chapter.price === 0) {
+    if (chapter.price === 0) {
       const fresh = checkLimit(LIMITS.saju);
       if (!fresh.allowed) {
         setError(`'${chapter.title}' 무료 풀이를 올해 이미 보셨습니다. ${fresh.resetText}`);
         return;
       }
-    } else if (!IS_DEV) {
-      setError(`'${chapter.title}'은(는) 유료 챕터입니다 (구현 예정)`);
-      return;
+    } else {
+      if (!canUnlock(ents, `saju.${chapter.id}`)) {
+        if (!ents.loggedIn) {
+          router.push(`/login?callbackUrl=/saju`);
+          return;
+        }
+        // 챕터별 상품으로 바로 안내
+        router.push(`/checkout/saju.${chapter.id}`);
+        return;
+      }
     }
     setError("");
     setLoadingChapter(chapter.id);
@@ -142,6 +152,8 @@ export default function SajuPage() {
       if (chapter.price === 0) {
         recordUsage(LIMITS.saju);
         setGeneralLimit(checkLimit(LIMITS.saju));
+      } else {
+        ents.refresh();
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "알 수 없는 오류");
@@ -462,9 +474,15 @@ export default function SajuPage() {
                           {ch.title}
                           {hasResult && <span className="chapter-badge badge-done">✓ 풀이 완료</span>}
                           {!hasResult && isFree && <span className="chapter-badge badge-free">무료</span>}
-                          {!hasResult && !isFree && (
-                            <span className="chapter-badge badge-paid">{IS_DEV ? "[DEV] 무료" : "유료"}</span>
-                          )}
+                          {!hasResult && !isFree && (() => {
+                            const cs = chapterStatus(ents, "saju", ch.id);
+                            const label = cs.reason === 'bypass' ? "[DEV] 무료"
+                              : cs.reason === 'unlimited' ? "구독중"
+                              : cs.reason === 'chapter-credit' ? "결제완료"
+                              : cs.reason === 'pack-credit' ? `풀팩 ${cs.remaining}회 남음`
+                              : `${ch.price.toLocaleString()}원`;
+                            return <span className="chapter-badge badge-paid">{label}</span>;
+                          })()}
                         </div>
                         <div className="chapter-desc">{ch.desc}</div>
                       </div>
@@ -497,16 +515,18 @@ export default function SajuPage() {
                                             <div className="recommend-name">{rec.title}</div>
                                             <div className="recommend-desc-sm">{rec.desc}</div>
                                           </div>
-                                          <span className="recommend-cta">{IS_DEV ? "[DEV] 보기" : "유료 ›"}</span>
+                                          <span className="recommend-cta">
+                                            {canUnlock(ents, `saju.${rec.id}`) ? "보기 ›" : `${rec.price.toLocaleString()}원 ›`}
+                                          </span>
                                         </div>
                                       );
                                     })}
                                   </div>
                                 </div>
                               )}
-                              {IS_DEV && (
+                              {(IS_DEV_ENV || ents.bypassed || sajuSubStatus?.unlimited) && (
                                 <div className="chapter-actions">
-                                  <button onClick={() => regenerate(ch)}>🔄 [DEV] 다시 받기</button>
+                                  <button onClick={() => regenerate(ch)}>🔄 다시 받기</button>
                                 </div>
                               )}
                             </>

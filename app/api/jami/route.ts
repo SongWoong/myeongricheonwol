@@ -4,6 +4,7 @@ import { calcJami, formatJamiForPrompt } from "@/app/lib/jami";
 import { stripMarkdown, NO_MARKDOWN_RULE } from "@/app/lib/sanitize";
 import { VOICES, voiceBlock } from "@/app/lib/voices";
 import { getJamiChapter } from "@/app/lib/jami-chapters";
+import { gateFeature } from "@/app/lib/payment/gate";
 
 const client = new Anthropic();
 
@@ -18,6 +19,12 @@ export async function POST(req: NextRequest) {
     const chapter = getJamiChapter(chapterId);
     if (!chapter) {
       return NextResponse.json({ error: "존재하지 않는 챕터입니다" }, { status: 400 });
+    }
+
+    let gate: Awaited<ReturnType<typeof gateFeature>> | null = null;
+    if (chapter.price > 0) {
+      gate = await gateFeature(`jami.${chapter.id}`);
+      if (!gate.ok) return gate.response;
     }
 
     const chart = calcJami({
@@ -66,6 +73,11 @@ ${NO_MARKDOWN_RULE}`,
     });
 
     const raw = message.content[0].type === "text" ? message.content[0].text : "";
+
+    if (gate?.ok) {
+      try { await gate.consume(); } catch (e) { console.error("[jami] consume credit failed", e); }
+    }
+
     const summary = `명궁(${chart.soulPalaceBranch}) · 신궁(${chart.bodyPalaceBranch}) · ${chart.fiveElementsClass} · ${chart.zodiac}띠`;
     return NextResponse.json({ result: stripMarkdown(raw), chart: summary, chapterId });
   } catch (err) {
