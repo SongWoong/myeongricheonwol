@@ -144,10 +144,10 @@ export function calcSaju(input: SajuInput): SajuChart {
     ? ` (진태양시 ${String(hour).padStart(2,"0")}:${String(minute).padStart(2,"0")})`
     : "";
   const formattedParts = [
-    `年柱 ${yearP.ganzhi}`,
-    `月柱 ${monthP.ganzhi}`,
-    `日柱 ${dayP.ganzhi}`,
-    hourP ? `時柱 ${hourP.ganzhi}${tstNote}` : `時柱 미상`,
+    `年柱(연주) ${annotateHanja(yearP.ganzhi)}`,
+    `月柱(월주) ${annotateHanja(monthP.ganzhi)}`,
+    `日柱(일주) ${annotateHanja(dayP.ganzhi)}`,
+    hourP ? `時柱(시주) ${annotateHanja(hourP.ganzhi)}${tstNote}` : `時柱(시주) 미상`,
   ];
 
   return {
@@ -181,17 +181,37 @@ export function calcSaju(input: SajuInput): SajuChart {
   };
 }
 
+// 한자→한글 발음 변환 (천간/지지)
+const HANJA_READING: Record<string, string> = {
+  // 천간(天干)
+  甲: "갑", 乙: "을", 丙: "병", 丁: "정", 戊: "무",
+  己: "기", 庚: "경", 辛: "신", 壬: "임", 癸: "계",
+  // 지지(地支)
+  子: "자", 丑: "축", 寅: "인", 卯: "묘", 辰: "진", 巳: "사",
+  午: "오", 未: "미", 申: "신", 酉: "유", 戌: "술", 亥: "해",
+};
+
+/** "庚午" → "庚午(경오)" 처럼 모든 천간·지지 한자에 한글 발음을 괄호로 붙임. */
+export function annotateHanja(s: string): string {
+  // 연속된 한자(천간/지지)를 그룹으로 잡아서 한 번에 표기
+  return s.replace(/[甲乙丙丁戊己庚辛壬癸子丑寅卯辰巳午未申酉戌亥]+/g, (m) => {
+    const reading = Array.from(m).map((ch) => HANJA_READING[ch] || ch).join("");
+    return `${m}(${reading})`;
+  });
+}
+
 export function formatSajuForPrompt(chart: SajuChart): string {
   const { pillars, dayMaster, wuxingCount, shiShen, lunar, yearShengXiao, naYin, jieQi, xunKong, daYun } = chart;
   const wuxingStr = Object.entries(wuxingCount).map(([k, v]) => `${k}:${v}`).join(" ");
 
   const pillarLine = (label: string, p: PillarInfo | null, naYinStr: string | null) => {
     if (!p) return `- ${label}: 미상`;
-    return `- ${label}: ${p.ganzhi} | 12운성:${p.diShi} | 지장간:[${p.hideGan.join(",")}]${naYinStr ? ` | 납음:${naYinStr}` : ""}`;
+    const hideGanStr = p.hideGan.map((g) => `${g}(${HANJA_READING[g] || g})`).join(",");
+    return `- ${label}: ${annotateHanja(p.ganzhi)} | 12운성:${p.diShi} | 지장간:[${hideGanStr}]${naYinStr ? ` | 납음:${naYinStr}` : ""}`;
   };
 
   const daYunStr = daYun.length
-    ? `\n[대운(大運) 흐름]\n` + daYun.map((d) => `- ${d.startAge}세(${d.startYear}년)~${d.endAge}세(${d.endYear}년): ${d.ganzhi}`).join("\n")
+    ? `\n[대운(大運) 흐름]\n` + daYun.map((d) => `- ${d.startAge}세(${d.startYear}년)~${d.endAge}세(${d.endYear}년): ${annotateHanja(d.ganzhi)}`).join("\n")
     : "";
 
   const timeNote = chart.solar.hour !== undefined
@@ -201,7 +221,7 @@ export function formatSajuForPrompt(chart: SajuChart): string {
   return `[명식 (만세력 정밀 계산)]
 ${pillarLine("년주", pillars.year, naYin.year)}
 ${pillarLine("월주", pillars.month, naYin.month)}
-${pillarLine("일주", pillars.day, naYin.day)} ← 일간(日干) = ${dayMaster.gan}(${dayMaster.wuxing})
+${pillarLine("일주", pillars.day, naYin.day)} ← 일간(日干) = ${dayMaster.gan}(${HANJA_READING[dayMaster.gan] || ""}, ${dayMaster.wuxing})
 ${pillarLine("시주", pillars.hour, naYin.hour)}
 - 절기 기준: ${jieQi}
 - 음력: ${lunar.year}년 ${lunar.isLeap ? "윤" : ""}${lunar.month}월 ${lunar.day}일 (${yearShengXiao}띠)
