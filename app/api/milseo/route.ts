@@ -45,10 +45,14 @@ export async function POST(req: NextRequest) {
 
     const isLight = chapter.id === "charm-light";
     const heavy = chapter.id === "intimate";
-    const maxTokens = isLight ? 1500 : heavy ? 7000 : 5000;
+    const isPaid = chapter.price > 0;
+    const model = isPaid ? "claude-sonnet-4-6" : "claude-haiku-4-5-20251001";
+    const maxTokens = isPaid
+      ? (heavy ? 12000 : 6000)
+      : (isLight ? 1500 : 3000);
 
     const message = await client.messages.create({
-      model: "claude-haiku-4-5-20251001",
+      model,
       max_tokens: maxTokens,
       messages: [
         {

@@ -38,11 +38,13 @@ export async function POST(req: NextRequest) {
   · 키워드: ${c.keywords.join(", ")}`;
     }).join("\n\n");
 
+    // 1장(무료)은 Haiku, 3장/10장(유료)은 Sonnet
+    const isPaidSpread = spread && spread.id !== "single";
     const message = await client.messages.create({
-      model: "claude-haiku-4-5-20251001",
+      model: isPaidSpread ? "claude-sonnet-4-6" : "claude-haiku-4-5-20251001",
       max_tokens: cards.length === 1
         ? 700
-        : Math.min(1500 + cards.length * 650, 8000),
+        : Math.min(3000 + cards.length * 1000, 16000),
       messages: [
         {
           role: "user",

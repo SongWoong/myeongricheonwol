@@ -36,10 +36,15 @@ export async function POST(req: NextRequest) {
 
     const heavy = chapter.id === "general" || chapter.id === "thisyear" || chapter.id === "daewoon";
     const isLight = chapter.id === "thisyear-light";
-    const maxTokens = isLight ? 1200 : heavy ? 5500 : 3000;
+    // 유료 챕터는 Sonnet 4.6 (64k 출력, 더 정교한 글), 무료는 Haiku 4.5 (빠르고 저렴)
+    const isPaid = chapter.price > 0;
+    const model = isPaid ? "claude-sonnet-4-6" : "claude-haiku-4-5-20251001";
+    const maxTokens = isPaid
+      ? (heavy ? 12000 : 6000)
+      : (isLight ? 1200 : 3000);
 
     const message = await client.messages.create({
-      model: "claude-haiku-4-5-20251001",
+      model,
       max_tokens: maxTokens,
       messages: [
         {
