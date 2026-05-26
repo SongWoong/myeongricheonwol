@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
       if (!name || name.trim().length === 0) {
         return NextResponse.json({ error: "이름을 입력해주세요" }, { status: 400 });
       }
-      const user = findEmailByName(name.trim());
+      const user = await findEmailByName(name.trim());
       if (!user) {
         return NextResponse.json({ error: "해당 이름으로 가입된 계정이 없습니다" }, { status: 404 });
       }
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
       if (!email || email.trim().length === 0) {
         return NextResponse.json({ error: "이메일을 입력해주세요" }, { status: 400 });
       }
-      const exists = userExists(email.trim());
+      const exists = await userExists(email.trim());
       if (!exists) {
         return NextResponse.json({ error: "가입되지 않은 이메일입니다" }, { status: 404 });
       }
@@ -39,11 +39,11 @@ export async function POST(req: NextRequest) {
       if (!email || !newPassword || newPassword.length < 6) {
         return NextResponse.json({ error: "이메일과 새 비밀번호(6자 이상)를 입력해주세요" }, { status: 400 });
       }
-      const user = findUserByEmail(email.trim());
+      const user = await findUserByEmail(email.trim());
       if (!user) {
         return NextResponse.json({ error: "가입되지 않은 이메일입니다" }, { status: 404 });
       }
-      updatePassword(email.trim(), newPassword);
+      await updatePassword(email.trim(), newPassword);
       return NextResponse.json({ result: true });
     }
 

@@ -13,6 +13,8 @@
     "@auth/core": "^0.34.3",
     "@supabase/supabase-js": "^2.104.1",
     "@tosspayments/payment-sdk": "^1.9.2",
+    "@types/bcryptjs": "^2.4.6",
+    "bcryptjs": "^3.0.3",
     "iztro": "^2.5.8",
     "lunar-typescript": "^1.8.6",
     "next": "16.2.4",

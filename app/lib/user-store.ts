@@ -1,80 +1,82 @@
 /**
- * 개발용 간이 유저 저장소 (파일 기반 JSON)
- * 실제 서비스에서는 Supabase 등 실제 DB로 교체 필요
+ * 이메일 회원가입 유저 저장소 — Supabase 기반.
+ * password는 bcrypt로 해싱해서 저장.
  */
 
-import fs from "fs";
-import path from "path";
+import bcrypt from "bcryptjs";
+import { getSupabaseAdmin } from "./supabase";
 
-const DB_PATH = path.join(process.cwd(), ".user-db.json");
-
-interface StoredUser {
+export interface StoredUser {
   email: string;
-  password: string; // 개발용 평문 저장 (실제 서비스에서는 bcrypt 등 해싱 필수)
+  password_hash: string;
   name: string;
-  createdAt: string;
+  created_at: string;
 }
 
-function readDb(): Record<string, StoredUser> {
-  try {
-    if (!fs.existsSync(DB_PATH)) return {};
-    const raw = fs.readFileSync(DB_PATH, "utf-8");
-    return JSON.parse(raw);
-  } catch {
-    return {};
+const SALT_ROUNDS = 10;
+
+export async function findUserByEmail(email: string): Promise<StoredUser | undefined> {
+  const supabase = getSupabaseAdmin();
+  const { data, error } = await supabase
+    .from("users")
+    .select("*")
+    .eq("email", email.toLowerCase())
+    .maybeSingle();
+  if (error) {
+    console.error("[findUserByEmail]", error);
+    return undefined;
   }
+  return data ?? undefined;
 }
 
-function writeDb(db: Record<string, StoredUser>) {
-  fs.writeFileSync(DB_PATH, JSON.stringify(db, null, 2), "utf-8");
-}
-
-export function findUserByEmail(email: string): StoredUser | undefined {
-  const db = readDb();
-  return db[email.toLowerCase()];
-}
-
-export function createUser(email: string, password: string, name: string): StoredUser {
-  const db = readDb();
+export async function createUser(email: string, password: string, name: string): Promise<StoredUser> {
   const key = email.toLowerCase();
-  if (db[key]) {
+  const existing = await findUserByEmail(key);
+  if (existing) {
     throw new Error("이미 가입된 이메일입니다");
   }
-  const user: StoredUser = {
-    email: key,
-    password,
-    name,
-    createdAt: new Date().toISOString(),
-  };
-  db[key] = user;
-  writeDb(db);
-  return user;
+  const password_hash = await bcrypt.hash(password, SALT_ROUNDS);
+  const supabase = getSupabaseAdmin();
+  const { data, error } = await supabase
+    .from("users")
+    .insert({ email: key, password_hash, name })
+    .select()
+    .single();
+  if (error || !data) {
+    throw new Error(`회원가입 실패: ${error?.message ?? "알 수 없는 오류"}`);
+  }
+  return data;
 }
 
-export function verifyPassword(user: StoredUser, password: string): boolean {
-  return user.password === password;
+export async function verifyPassword(user: StoredUser, password: string): Promise<boolean> {
+  return bcrypt.compare(password, user.password_hash);
 }
 
-/** 비밀번호 변경 (개발용) */
-export function updatePassword(email: string, newPassword: string): boolean {
-  const db = readDb();
-  const key = email.toLowerCase();
-  if (!db[key]) return false;
-  db[key].password = newPassword;
-  writeDb(db);
-  return true;
+export async function updatePassword(email: string, newPassword: string): Promise<boolean> {
+  const supabase = getSupabaseAdmin();
+  const password_hash = await bcrypt.hash(newPassword, SALT_ROUNDS);
+  const { error } = await supabase
+    .from("users")
+    .update({ password_hash })
+    .eq("email", email.toLowerCase());
+  return !error;
 }
 
-/** 이름으로 이메일 찾기 */
-export function findEmailByName(name: string): StoredUser | undefined {
-  const db = readDb();
-  return Object.values(db).find(
-    (u) => u.name.toLowerCase() === name.toLowerCase()
-  );
+export async function findEmailByName(name: string): Promise<StoredUser | undefined> {
+  const supabase = getSupabaseAdmin();
+  const { data, error } = await supabase
+    .from("users")
+    .select("*")
+    .ilike("name", name)
+    .limit(1)
+    .maybeSingle();
+  if (error) {
+    console.error("[findEmailByName]", error);
+    return undefined;
+  }
+  return data ?? undefined;
 }
 
-/** 이메일 존재 여부 확인 */
-export function userExists(email: string): boolean {
-  const db = readDb();
-  return !!db[email.toLowerCase()];
+export async function userExists(email: string): Promise<boolean> {
+  return !!(await findUserByEmail(email));
 }

@@ -67,7 +67,7 @@ providers.push(
         if (!inputName || inputName.trim().length === 0) {
           throw new Error("이름을 입력해주세요");
         }
-        const newUser = createUser(email, password, inputName.trim());
+        const newUser = await createUser(email, password, inputName.trim());
         return {
           id: newUser.email,
           email: newUser.email,
@@ -77,11 +77,11 @@ providers.push(
       }
 
       // 로그인
-      const user = findUserByEmail(email);
+      const user = await findUserByEmail(email);
       if (!user) {
         throw new Error("가입되지 않은 이메일입니다. 회원가입을 먼저 해주세요");
       }
-      if (!verifyPassword(user, password)) {
+      if (!(await verifyPassword(user, password))) {
         throw new Error("비밀번호가 일치하지 않습니다");
       }
 
