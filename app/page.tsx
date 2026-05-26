@@ -122,8 +122,8 @@ function MobileHome({ characters, tabs, activeTab, setActiveTab, router, session
         <header>
           <div><div className="logo">命理天月</div><div className="logo-sub">MYEONGRICHEONWOL</div></div>
           {session?.user ? (
-            <button className="btn-login" onClick={() => signOut()}>
-              {session.user.nickname || session.user.name || "나의"} ▽
+            <button className="btn-login" onClick={() => signOut({ callbackUrl: "/" })}>
+              {session.user.nickname || session.user.name || "나의"} · 로그아웃
             </button>
           ) : (
             <button className="btn-login" onClick={() => router.push("/login")}>로그인</button>

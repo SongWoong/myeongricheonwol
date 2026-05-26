@@ -146,7 +146,7 @@ export function HomeDesktop({ characters }: Props) {
           <div className="d-login-wrap">
             {session?.user ? (
               <button className="d-login" onClick={() => signOut({ callbackUrl: "/" })}>
-                {(session.user as { nickname?: string }).nickname || session.user.name || "로그아웃"}
+                {(session.user as { nickname?: string }).nickname || session.user.name || "나의"} · 로그아웃
               </button>
             ) : (
               <button className="d-login" onClick={() => router.push("/login")}>로그인</button>
