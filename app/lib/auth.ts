@@ -10,7 +10,7 @@ const providers: NextAuthOptions["providers"] = [
     clientSecret: process.env.KAKAO_CLIENT_SECRET || "",
     checks: ["state"], // PKCE 비활성화 (카카오 미지원)
     authorization: {
-      params: { scope: "profile_nickname,profile_image,account_age" },
+      params: { scope: "profile_nickname,profile_image" },
     },
     profile(profile) {
       return {
