@@ -47,6 +47,8 @@ export default function SajuPage() {
   const [loadingChapter, setLoadingChapter] = useState<string | null>(null);
   const [openChapterId, setOpenChapterId] = useState<string | null>(null);
   const [pendingChapterId, setPendingChapterId] = useState<string | null>(null);
+  const [pdfLoading, setPdfLoading] = useState<"core" | "full" | null>(null);
+  const [pdfError, setPdfError] = useState("");
   const [form, setForm] = useState<FormState>({
     name: "", year: "", month: "", day: "", hour: "", minute: "",
     gender: "여성", calendar: "양력", city: "", longitude: "",
@@ -189,6 +191,38 @@ export default function SajuPage() {
     }
   };
 
+  const downloadPdf = async (type: "core" | "full") => {
+    setPdfError("");
+    setPdfLoading(type);
+    try {
+      const res = await fetch("/api/saju/pdf", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name, birthdate, time: timeStr,
+          gender: form.gender, calendar: form.calendar,
+          longitude: form.longitude ? Number(form.longitude) : undefined,
+          pdfType: type,
+        }),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "PDF 생성 실패");
+      }
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${form.name}_사주_${type === "full" ? "전체" : "코어"}.pdf`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      setPdfError(err instanceof Error ? err.message : "PDF 생성 실패");
+    } finally {
+      setPdfLoading(null);
+    }
+  };
+
   const editForm = () => {
     setStage("form");
     setError("");
@@ -295,6 +329,23 @@ export default function SajuPage() {
         .recommend-cta{font-family:sans-serif;font-size:10px;color:#e0b070;letter-spacing:1px;flex-shrink:0;font-weight:600}
 
         .disclaimer{margin-top:18px;padding:10px 12px;font-family:sans-serif;font-size:10px;color:rgba(255,255,255,0.4);background:rgba(10,8,30,0.5);border:1px dashed rgba(112,96,224,0.25);border-radius:4px;line-height:1.6;text-align:center}
+        .pdf-section{margin-top:24px;padding:18px 16px;background:rgba(40,30,80,0.5);border:1px solid rgba(112,96,224,0.35);border-radius:10px}
+        .pdf-label{font-family:sans-serif;font-size:11px;letter-spacing:4px;color:#a090e0;text-align:center;margin-bottom:6px}
+        .pdf-sub{font-family:sans-serif;font-size:10px;color:rgba(255,255,255,0.45);text-align:center;margin-bottom:14px}
+        .pdf-cards{display:flex;flex-direction:column;gap:10px}
+        .pdf-card{display:flex;align-items:center;gap:12px;padding:14px;background:rgba(20,16,40,0.7);border:1px solid rgba(112,96,224,0.3);border-radius:8px;cursor:pointer;transition:all 0.15s}
+        .pdf-card:hover{background:rgba(60,45,120,0.7);border-color:rgba(160,120,240,0.6)}
+        .pdf-card:active{transform:scale(0.98)}
+        .pdf-card-icon{font-family:'Noto Serif KR',serif;font-size:24px;color:#a090e0;width:36px;text-align:center;flex-shrink:0;text-shadow:0 0 10px rgba(160,120,240,0.5)}
+        .pdf-card-body{flex:1;min-width:0}
+        .pdf-card-title{font-size:13px;color:#fff;letter-spacing:1px;margin-bottom:3px}
+        .pdf-card-chapters{font-family:sans-serif;font-size:10px;color:rgba(255,255,255,0.45);margin-bottom:5px;line-height:1.4}
+        .pdf-card-price{font-family:sans-serif;font-size:11px;color:#c8a870;font-weight:600;letter-spacing:1px}
+        .pdf-card-arrow{color:rgba(160,130,240,0.7);font-size:18px;flex-shrink:0}
+        .pdf-loading{margin-top:12px;text-align:center;font-family:sans-serif;font-size:11px;color:#a090e0;letter-spacing:1px;display:flex;align-items:center;justify-content:center;gap:8px}
+        .pdf-loading-ring{display:inline-block;width:16px;height:16px;border:2px solid rgba(160,120,240,0.25);border-top-color:#a090e0;border-radius:50%;animation:spin 1s linear infinite;flex-shrink:0}
+        .pdf-spin{display:inline-block;width:16px;height:16px;border:2px solid rgba(160,120,240,0.2);border-top-color:#a090e0;border-radius:50%;animation:spin 1s linear infinite}
+        .pdf-err{margin-top:8px;font-family:sans-serif;font-size:11px;color:#ff8090;text-align:center;padding:8px;background:rgba(200,40,80,0.1);border-radius:4px}
       `}</style>
       <div className="app">
         <div className="stars" aria-hidden>
@@ -542,6 +593,44 @@ export default function SajuPage() {
                   </div>
                 );
               })}
+
+              {hasFormData && (
+                <div className="pdf-section">
+                  <div className="pdf-label">✦ 정밀 풀이 PDF</div>
+                  <div className="pdf-sub">사주 풀이를 아름다운 PDF로 저장하세요 · 생성에 30~60초 소요</div>
+                  <div className="pdf-cards">
+                    <div className="pdf-card" onClick={() => !pdfLoading && downloadPdf("core")}>
+                      <div className="pdf-card-icon">命</div>
+                      <div className="pdf-card-body">
+                        <div className="pdf-card-title">코어 풀이</div>
+                        <div className="pdf-card-chapters">종합 · 연애 · 대운 · 올해 (4챕터)</div>
+                        <div className="pdf-card-price">{IS_DEV_ENV ? "[DEV] 무료" : "₩9,900"}</div>
+                      </div>
+                      <div className="pdf-card-arrow">
+                        {pdfLoading === "core" ? <span className="pdf-spin"/> : "›"}
+                      </div>
+                    </div>
+                    <div className="pdf-card" onClick={() => !pdfLoading && downloadPdf("full")}>
+                      <div className="pdf-card-icon">全</div>
+                      <div className="pdf-card-body">
+                        <div className="pdf-card-title">전체 풀이</div>
+                        <div className="pdf-card-chapters">종합 · 연애 · 재물 · 직업 · 건강 · 가족 · 대운 · 올해 (8챕터)</div>
+                        <div className="pdf-card-price">{IS_DEV_ENV ? "[DEV] 무료" : "₩19,900"}</div>
+                      </div>
+                      <div className="pdf-card-arrow">
+                        {pdfLoading === "full" ? <span className="pdf-spin"/> : "›"}
+                      </div>
+                    </div>
+                  </div>
+                  {pdfLoading && (
+                    <div className="pdf-loading">
+                      <span className="pdf-loading-ring"/>
+                      AI가 {pdfLoading === "full" ? "8개" : "4개"} 챕터를 집필 중입니다… (30~60초)
+                    </div>
+                  )}
+                  {pdfError && <div className="pdf-err">{pdfError}</div>}
+                </div>
+              )}
 
               <div className="disclaimer">
                 ※ 정통 만세력으로 사주를 정밀 계산 후<br />

@@ -66,6 +66,7 @@ ${NO_MARKDOWN_RULE}`,
     });
 
     const raw = message.content[0].type === "text" ? message.content[0].text : "";
+    if (message.stop_reason === "max_tokens") console.warn(`[today] stop_reason=max_tokens usage=${JSON.stringify(message.usage)}`);
     return NextResponse.json({ result: stripMarkdown(raw) });
   } catch (err) {
     console.error("[/api/today]", err);

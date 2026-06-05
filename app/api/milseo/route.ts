@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
     const isPaid = chapter.price > 0;
     const model = isPaid ? "claude-sonnet-4-6" : "claude-haiku-4-5-20251001";
     const maxTokens = isPaid
-      ? (heavy ? 12000 : 6000)
+      ? (heavy ? 16000 : 8000)
       : (isLight ? 1500 : 3000);
 
     const message = await client.messages.create({
@@ -106,7 +106,10 @@ ${NO_MARKDOWN_RULE}`,
       try { await gate.consume(); } catch (e) { console.error("[milseo] consume credit failed", e); }
     }
 
-    return NextResponse.json({ result: stripMarkdown(raw), chapterId });
+    const truncated = message.stop_reason === "max_tokens";
+    if (truncated) console.warn(`[milseo] stop_reason=max_tokens chapterId=${chapterId} usage=${JSON.stringify(message.usage)}`);
+
+    return NextResponse.json({ result: stripMarkdown(raw), chapterId, truncated });
   } catch (err) {
     console.error("[/api/milseo]", err);
     const msg = err instanceof Error ? err.message : "서버 오류";

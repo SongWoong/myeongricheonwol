@@ -99,23 +99,21 @@ export function HomeDesktop({ characters }: Props) {
         .d-tag-free{background:rgba(60,120,200,0.3);color:#a8d0ff;border:1px solid rgba(100,160,240,0.5)}
         .d-tag-adult{background:rgba(180,50,90,0.3);color:#ff9ab0;border:1px solid rgba(200,80,120,0.5)}
 
-        /* ───────── 듀오 섹션 ───────── */
-        .d-duo-section{position:relative;z-index:2;max-width:1400px;margin:0 auto;padding:20px 60px 60px}
-        .d-duo-card{position:relative;overflow:hidden;cursor:pointer;background:linear-gradient(135deg,rgba(40,30,80,0.8),rgba(80,30,100,0.8));backdrop-filter:blur(8px);transition:all 0.3s;display:grid;grid-template-columns:1fr 1.4fr 1fr;min-height:260px}
-        .d-duo-card:hover{transform:translateY(-4px);box-shadow:0 20px 50px rgba(140,100,220,0.45)}
-        .d-duo-img{position:relative;overflow:hidden}
-        .d-duo-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.6s}
-        .d-duo-card:hover .d-duo-img img{transform:scale(1.05)}
-        .d-duo-img.left img{object-position:right 18%}
-        .d-duo-img.right img{object-position:left 18%}
-        .d-duo-img-fade-l{position:absolute;top:0;right:0;width:50%;height:100%;background:linear-gradient(to right,transparent,rgba(45,20,75,0.9))}
-        .d-duo-img-fade-r{position:absolute;top:0;left:0;width:50%;height:100%;background:linear-gradient(to left,transparent,rgba(60,20,80,0.9))}
-        .d-duo-text{position:relative;z-index:2;padding:32px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
-        .d-duo-mark{font-family:sans-serif;font-size:10px;letter-spacing:6px;color:#c0a8e8;margin-bottom:10px}
-        .d-duo-name{font-family:'Diphylleia','Noto Serif KR',serif;font-size:30px;color:#fff;letter-spacing:8px;margin-bottom:12px;text-shadow:0 2px 18px rgba(0,0,0,0.9),0 0 20px rgba(220,180,255,0.35)}
-        .d-duo-desc{font-family:sans-serif;font-size:13px;color:rgba(255,255,255,0.85);line-height:1.8;margin-bottom:18px;text-shadow:0 2px 8px rgba(0,0,0,0.7)}
-        .d-duo-cta{font-family:'Noto Serif KR',serif;font-size:12px;letter-spacing:3px;color:#fff;padding:10px 24px;border:1px solid rgba(220,180,255,0.5);background:rgba(220,180,255,0.06);transition:all 0.2s}
-        .d-duo-card:hover .d-duo-cta{background:rgba(220,180,255,0.2);border-color:#fff}
+        /* ───────── 혜원 섹션 ───────── */
+        .d-hw-section{position:relative;z-index:2;max-width:1400px;margin:0 auto;padding:20px 60px 60px}
+        .d-hw-card{position:relative;overflow:hidden;cursor:pointer;background:linear-gradient(135deg,rgba(30,20,70,0.82),rgba(70,25,95,0.82));backdrop-filter:blur(8px);transition:all 0.3s;display:grid;grid-template-columns:300px 1fr;min-height:240px}
+        .d-hw-card:hover{transform:translateY(-4px);box-shadow:0 20px 50px rgba(140,100,220,0.45)}
+        .d-hw-img{position:relative;overflow:hidden}
+        .d-hw-img img{width:100%;height:100%;object-fit:cover;object-position:center 10%;display:block;transition:transform 0.6s}
+        .d-hw-card:hover .d-hw-img img{transform:scale(1.05)}
+        .d-hw-img-fade{position:absolute;top:0;right:0;width:60%;height:100%;background:linear-gradient(to right,transparent,rgba(40,18,68,0.92))}
+        .d-hw-text{position:relative;z-index:2;padding:36px 44px;display:flex;flex-direction:column;justify-content:center}
+        .d-hw-mark{font-family:sans-serif;font-size:10px;letter-spacing:6px;color:#c0a8e8;margin-bottom:10px}
+        .d-hw-name{font-family:'Diphylleia','Noto Serif KR',serif;font-size:32px;color:#fff;letter-spacing:8px;margin-bottom:6px;text-shadow:0 2px 18px rgba(0,0,0,0.9),0 0 20px rgba(220,180,255,0.35)}
+        .d-hw-role{font-family:sans-serif;font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:4px;margin-bottom:18px}
+        .d-hw-desc{font-family:sans-serif;font-size:14px;color:rgba(255,255,255,0.88);line-height:1.85;margin-bottom:22px;text-shadow:0 2px 8px rgba(0,0,0,0.7);max-width:480px}
+        .d-hw-cta{font-family:'Noto Serif KR',serif;font-size:12px;letter-spacing:3px;color:#fff;padding:10px 26px;border:1px solid rgba(220,180,255,0.5);background:rgba(220,180,255,0.06);transition:all 0.2s;align-self:flex-start}
+        .d-hw-card:hover .d-hw-cta{background:rgba(220,180,255,0.2);border-color:#fff}
 
         /* ───────── 푸터 (컴팩트) ───────── */
         .d-footer{position:relative;z-index:2;padding:18px 60px;background:rgba(0,0,0,0.55);backdrop-filter:blur(10px);border-top:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
@@ -138,10 +136,11 @@ export function HomeDesktop({ characters }: Props) {
             <span className="d-nav-item" onClick={() => router.push("/saju")}>사주</span>
             <span className="d-nav-item" onClick={() => router.push("/tarot")}>타로</span>
             <span className="d-nav-item" onClick={() => router.push("/jami")}>자미두수</span>
-            <span className="d-nav-item" onClick={() => router.push("/duo")}>자운×월령</span>
+            <span className="d-nav-item" onClick={() => router.push("/hyewon")}>혜원</span>
             <span className="d-nav-item" onClick={() => router.push("/dream")}>꿈해몽</span>
             <span className="d-nav-item" onClick={() => router.push("/today")}>오늘운세</span>
             <span className="d-nav-item" onClick={() => router.push("/tojeong")}>토정비결</span>
+            <span className="d-nav-item" onClick={() => router.push("/pdf")}>사주 PDF</span>
           </nav>
           <div className="d-login-wrap">
             {session?.user ? (
@@ -187,23 +186,26 @@ export function HomeDesktop({ characters }: Props) {
         </div>
       </section>
 
-      <section className="d-duo-section">
-        <div className="d-sec-tag">✦  合 一  ✦</div>
-        <div className="d-sec-title">운명의 합주(合奏)</div>
-        <div className="d-duo-card" onClick={() => router.push("/duo")}>
-          <div className="d-duo-img left">
-            <img src="/char-jawun.png" alt="자운" />
-            <div className="d-duo-img-fade-l" />
+      <section className="d-hw-section">
+        <div className="d-sec-tag">✦  慧源  ✦</div>
+        <div className="d-sec-title">AI 통합 상담</div>
+        <div className="d-hw-card" onClick={() => router.push("/hyewon")}>
+          <div className="d-hw-img">
+            <img src="/char-hyewon.png" alt="혜원"
+              onError={(e) => { (e.target as HTMLImageElement).src = "/char-wolryeong.png"; }}
+            />
+            <div className="d-hw-img-fade" />
           </div>
-          <div className="d-duo-text">
-            <div className="d-duo-mark">SAJU × TAROT</div>
-            <div className="d-duo-name">자운 × 월령</div>
-            <div className="d-duo-desc">사주의 깊이와 타로의 직관이<br/>하나의 질문에 함께 답합니다</div>
-            <div className="d-duo-cta">연애 · 재회 · 궁합 · 돈 · 일  →</div>
-          </div>
-          <div className="d-duo-img right">
-            <img src="/char-wolryeong.png" alt="월령" />
-            <div className="d-duo-img-fade-r" />
+          <div className="d-hw-text">
+            <div className="d-hw-mark">AI INTEGRATED CONSULTANT</div>
+            <div className="d-hw-name">혜원 · 慧源</div>
+            <div className="d-hw-role">사주 · 타로 통합 상담사</div>
+            <div className="d-hw-desc">
+              사주의 흐름과 타로의 직관으로<br/>
+              무엇이든 자유롭게 물어보세요<br/>
+              연애 · 직업 · 재물 · 건강 · 인간관계
+            </div>
+            <div className="d-hw-cta">지금 상담하기 →</div>
           </div>
         </div>
       </section>

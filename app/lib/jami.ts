@@ -41,8 +41,10 @@ const hourToTimeIndex = (hour: number): number => {
 };
 
 export function calcJami(input: JamiInput): JamiChart {
-  // 진태양시 보정 적용
-  const { hour, minute } = applyTrueSolarTime(input.hour, input.minute, input.longitude);
+  // 진태양시 보정 (경도 + 균시차)
+  const [birthY, birthM, birthD] = input.birthdate.split("-").map(Number);
+  const birthDate = new Date(birthY, birthM - 1, birthD);
+  const { hour, minute } = applyTrueSolarTime(input.hour, input.minute, input.longitude, birthDate);
   const timeIndex = hourToTimeIndex(hour);
   const genderName = input.gender === "남성" ? "男" : "女";
 
@@ -59,9 +61,7 @@ export function calcJami(input: JamiInput): JamiChart {
     bodyPalaceBranch: a.earthlyBranchOfBodyPalace,
     zodiac: a.zodiac,
     sign: a.sign,
-    correctedTime: input.longitude !== undefined && input.longitude !== null
-      ? `${String(hour).padStart(2,"0")}:${String(minute).padStart(2,"0")}`
-      : undefined,
+    correctedTime: `${String(hour).padStart(2,"0")}:${String(minute).padStart(2,"0")}`,
     palaces: a.palaces.map((p) => ({
       name: p.name,
       ganzhi: `${p.heavenlyStem}${p.earthlyBranch}`,

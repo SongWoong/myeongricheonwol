@@ -10,32 +10,45 @@ export interface SajuInput {
   longitude?: number;
 }
 
-/**
- * 진태양시(眞太陽時) 보정값을 분 단위로 반환
- * 한국 표준시(KST) 기준: 동경 135° 대비 경도 차이만큼 보정
- * - 135°보다 서쪽이면 -(음수) 분, 동쪽이면 +(양수) 분
- * - 1° 차이 ≈ 4분
- * 참고: 균시차(Equation of Time)는 ±16분 범위이나, 일반 사주에서는 경도 보정만 사용
- */
+/** 경도 보정값 (분). KST(135°) 기준 차이 × 4분/° */
 export function trueSolarTimeOffset(longitude: number): number {
-  const STANDARD_MERIDIAN = 135; // KST 기준 자오선 (동경 135°)
-  const MINUTES_PER_DEGREE = 4;
-  return (longitude - STANDARD_MERIDIAN) * MINUTES_PER_DEGREE;
+  const STANDARD_MERIDIAN = 135;
+  return (longitude - STANDARD_MERIDIAN) * 4;
 }
 
 /**
- * 입력된 시/분에 진태양시 보정을 적용한 보정된 시/분을 반환
- * 보정으로 인해 날짜가 바뀔 수 있으므로 보정 분(minute offset)만 반환
+ * 균시차(Equation of Time) — 평균태양시와 진태양시의 차이 (분)
+ * Spencer(1971) 근사식, 정확도 ±1분 이내
+ * 범위: 약 -14분 ~ +16분
+ */
+export function equationOfTime(date: Date): number {
+  const start = new Date(date.getFullYear(), 0, 1);
+  const N = Math.floor((date.getTime() - start.getTime()) / 86400000) + 1;
+  const B = (2 * Math.PI * (N - 81)) / 365;
+  return 9.87 * Math.sin(2 * B) - 7.53 * Math.cos(B) - 1.5 * Math.sin(B);
+}
+
+/**
+ * 진태양시(眞太陽時) 보정: 경도 보정 + 균시차 보정 적용
+ * - date 미전달 시 균시차 생략 (시간 미상인 경우)
+ * - longitude 미전달 시 경도 보정 생략
  */
 export function applyTrueSolarTime(
   hour: number,
   minute: number,
-  longitude?: number
+  longitude?: number,
+  date?: Date
 ): { hour: number; minute: number } {
-  if (longitude === undefined || longitude === null) {
+  if ((longitude === undefined || longitude === null) && !date) {
     return { hour, minute };
   }
-  const offsetMin = trueSolarTimeOffset(longitude);
+  let offsetMin = 0;
+  if (longitude !== undefined && longitude !== null) {
+    offsetMin += trueSolarTimeOffset(longitude);
+  }
+  if (date) {
+    offsetMin += equationOfTime(date);
+  }
   let totalMin = hour * 60 + minute + Math.round(offsetMin);
   if (totalMin < 0) totalMin += 24 * 60;
   if (totalMin >= 24 * 60) totalMin -= 24 * 60;
@@ -92,8 +105,9 @@ export function calcSaju(input: SajuInput): SajuChart {
   const rawHour = Number(hStr || 12);
   const rawMinute = Number(minStr || 0);
 
-  // 진태양시 보정 적용
-  const { hour, minute } = applyTrueSolarTime(rawHour, rawMinute, input.longitude);
+  // 진태양시 보정 (경도 + 균시차). 시간 미상 시 균시차 생략.
+  const birthDate = input.time ? new Date(y, m - 1, d) : undefined;
+  const { hour, minute } = applyTrueSolarTime(rawHour, rawMinute, input.longitude, birthDate);
 
   let solar: Solar;
   if (input.calendar === "음력") {
@@ -140,8 +154,8 @@ export function calcSaju(input: SajuInput): SajuChart {
     })).filter((du) => du.ganzhi);
   }
 
-  const tstNote = input.longitude !== undefined && input.longitude !== null
-    ? ` (진태양시 ${String(hour).padStart(2,"0")}:${String(minute).padStart(2,"0")})`
+  const tstNote = input.time
+    ? ` (진태양시+균시차 보정 → ${String(hour).padStart(2,"0")}:${String(minute).padStart(2,"0")})`
     : "";
   const formattedParts = [
     `年柱(연주) ${annotateHanja(yearP.ganzhi)}`,

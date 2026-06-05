@@ -20,12 +20,13 @@ export default function Home() {
     { id: "tarot", name: "월령", hanja: "月靈", role: "타로", desc: "카드로 현재와 미래를 보다", tag: "1장 무료", adult: false, image: "/char-wolryeong.png", color: "#a040b0" },
     { id: "jami", name: "성연", hanja: "星淵", role: "자미두수", desc: "별의 자리로 일생을 보다", tag: "기본 무료", adult: false, image: "/char-seongha.png", color: "#2080d0" },
     { id: "milseo", name: "밀서", hanja: "密書", role: "밀서", desc: "은밀한 욕망과 운명의 기운", tag: "성인 전용", adult: true, image: "/char-milseo.png", color: "#c03060" },
+    { id: "pdf", name: "명서", hanja: "命書", role: "사주 PDF", desc: "나만의 사주 풀이를 PDF 한 권으로", tag: "PDF 저장", adult: false, image: "/char-jawun.png", color: "#9070d0" },
   ];
   const tabs = [
     { id: "home", icon: "🏠", label: "홈", free: false, path: "/" },
     { id: "dream", icon: "🌙", label: "꿈해몽", free: true, path: "/dream" },
     { id: "today", icon: "💫", label: "오늘운세", free: true, path: "/today" },
-    { id: "tojeong", icon: "📜", label: "토정비결", free: true, path: "/tojeong" },
+    { id: "pdf", icon: "📄", label: "PDF", free: false, path: "/pdf" },
     { id: "replay", icon: "📦", label: "보관함", free: true, path: "/replay" },
   ];
   // 서버/초기 렌더 = null 상태: 빈 화면. 클라이언트에서 결정 후 하나만 렌더.

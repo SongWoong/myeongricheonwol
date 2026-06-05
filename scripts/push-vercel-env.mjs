@@ -7,11 +7,20 @@ import { spawn } from "node:child_process";
 import { readFileSync } from "node:fs";
 
 const VARS = [
-  "NEXT_PUBLIC_BIZ_ECOMMERCE_NO",
-  "NEXT_PUBLIC_BIZ_ADDRESS",
+  "PAYMENT_MODE",
+  "TOSS_SECRET_KEY",
+  "NEXT_PUBLIC_TOSS_CLIENT_KEY",
+  "TOSS_WEBHOOK_SECRET",
+  "NEXT_PUBLIC_PAYMENT_SUCCESS_URL",
+  "NEXT_PUBLIC_PAYMENT_FAIL_URL",
 ];
 
-const ENVS = ["preview"];
+const ENVS = ["production", "development"];
+
+const OVERRIDES = {
+  NEXT_PUBLIC_PAYMENT_SUCCESS_URL: "https://myeongricheonwol.vercel.app/checkout/success",
+  NEXT_PUBLIC_PAYMENT_FAIL_URL: "https://myeongricheonwol.vercel.app/checkout/fail",
+};
 
 function parseEnvFile(path) {
   const raw = readFileSync(path, "utf8");
@@ -47,7 +56,7 @@ function addEnv(name, env, value) {
 const envMap = parseEnvFile(".env.local");
 
 for (const name of VARS) {
-  const value = envMap[name];
+  const value = (OVERRIDES[name] ?? envMap[name]);
   if (!value) {
     console.warn(`! Skipping ${name} — not found or empty in .env.local`);
     continue;

@@ -36,11 +36,10 @@ export async function POST(req: NextRequest) {
 
     const heavy = chapter.id === "general" || chapter.id === "thisyear" || chapter.id === "daewoon";
     const isLight = chapter.id === "thisyear-light";
-    // 유료 챕터는 Sonnet 4.6 (64k 출력, 더 정교한 글), 무료는 Haiku 4.5 (빠르고 저렴)
     const isPaid = chapter.price > 0;
     const model = isPaid ? "claude-sonnet-4-6" : "claude-haiku-4-5-20251001";
     const maxTokens = isPaid
-      ? (heavy ? 12000 : 6000)
+      ? (heavy ? 16000 : 8000)
       : (isLight ? 1200 : 3000);
 
     const message = await client.messages.create({
@@ -78,12 +77,14 @@ ${NO_MARKDOWN_RULE}`,
     });
 
     const raw = message.content[0].type === "text" ? message.content[0].text : "";
+    const truncated = message.stop_reason === "max_tokens";
+    if (truncated) console.warn(`[saju] stop_reason=max_tokens chapterId=${chapterId} usage=${JSON.stringify(message.usage)}`);
 
     if (gate?.ok) {
       try { await gate.consume(); } catch (e) { console.error("[saju] consume credit failed", e); }
     }
 
-    return NextResponse.json({ result: stripMarkdown(raw), chart: chart.formatted, chapterId });
+    return NextResponse.json({ result: stripMarkdown(raw), chart: chart.formatted, chapterId, truncated });
   } catch (err) {
     console.error("[/api/saju]", err);
     const msg = err instanceof Error ? err.message : "서버 오류";

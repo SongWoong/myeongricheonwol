@@ -26,14 +26,27 @@ export async function POST(request: NextRequest) {
     }
 
     const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 });
-    }
 
-    const body = (await request.json()) as { productId?: string };
+    const body = (await request.json()) as {
+      productId?: string;
+      guestName?: string;
+      guestEmail?: string;
+    };
     if (!body.productId) {
       return NextResponse.json({ error: 'productId가 필요합니다.' }, { status: 400 });
     }
+
+    // 비회원: guestName + guestEmail 필수
+    const isGuest = !session?.user?.id;
+    if (isGuest && (!body.guestName?.trim() || !body.guestEmail?.trim())) {
+      return NextResponse.json(
+        { error: '비회원 결제 시 이름과 이메일을 입력해주세요.' },
+        { status: 400 },
+      );
+    }
+
+    const customerEmail = isGuest ? body.guestEmail! : session!.user!.email;
+    const customerName  = isGuest ? body.guestName!  : (session!.user!.name || session!.user!.email);
 
     const sb = getSupabaseAdmin();
     const { data: product, error: productErr } = await sb
@@ -51,8 +64,8 @@ export async function POST(request: NextRequest) {
     const orderId = generateOrderId();
 
     const { error: insertErr } = await sb.from('payments').insert({
-      user_id: session.user.id,
-      user_email: session.user.email,
+      user_id: isGuest ? null : session!.user!.id,
+      user_email: customerEmail,
       product_id: p.id,
       order_id: orderId,
       amount: p.price,
@@ -78,8 +91,8 @@ export async function POST(request: NextRequest) {
       failUrl:
         process.env.NEXT_PUBLIC_PAYMENT_FAIL_URL ||
         `${request.nextUrl.origin}/checkout/fail`,
-      customerEmail: session.user.email,
-      customerName: session.user.name || session.user.email,
+      customerEmail,
+      customerName,
     });
   } catch (e) {
     const msg = e instanceof Error ? e.message : '알 수 없는 오류';

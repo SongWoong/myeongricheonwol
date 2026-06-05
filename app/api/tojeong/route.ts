@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
 
     const message = await client.messages.create({
       model: "claude-haiku-4-5-20251001",
-      max_tokens: 7500,
+      max_tokens: 3500,
       messages: [
         {
           role: "user",
@@ -41,22 +41,19 @@ ${sajuBlock}
 다음 구조로 작성해주세요:
 
 ✦ 올해의 괘(卦)
-(이 사람의 ${targetYear}년 운세를 한 줄 시구로 표현, 예: "구름이 걷히고 달이 드러난다 — 雲散月現")
+(한 줄 시구만)
 
 ✦ 총운
-(${targetYear}년 세운(${yearGanZhi})과 사용자 일간(${chart.dayMaster.gan})의 관계를 고려한 한 해 흐름, 4~5문장)
+(3문장 이내)
 
 ✦ 월별 운세
-1월 — (핵심 한 줄 + 풀이 2문장, 너무 길게 쓰지 말 것)
+1월 — (핵심 한 줄만)
 2월 — ...
-... (반드시 1월~12월 12개 모두, 각 월 3줄 이내)
+... (반드시 1~12월 모두, 각 월 한 줄씩만)
 
-✦ 재물운 (2~3문장)
-✦ 애정·인연운 (2~3문장)
-✦ 건강운 (2~3문장)
-✦ 길월·흉월 (가장 좋은 달과 조심할 달)
-✦ 올해의 부적 (색상 1, 방위 1, 숫자 1, 키워드 단어 3개)
-   — 각 항목은 짧게 한 줄씩만, 길게 설명하지 말 것
+✦ 재물·애정·건강 (각 1~2문장씩, 한 섹션으로 묶어도 됨)
+✦ 길월·흉월 (각 달 이름만)
+✦ 올해의 키워드 (색상·방위·숫자·단어 3개, 한 줄)
 
 각 항목 제목 앞에 ✦ 기호를 유지하고, 항목 사이는 빈 줄로 구분해주세요.
 월별 운세는 "1월 — " 형식 유지.
@@ -69,7 +66,9 @@ ${NO_MARKDOWN_RULE}`,
     });
 
     const raw = message.content[0].type === "text" ? message.content[0].text : "";
-    return NextResponse.json({ result: stripMarkdown(raw) });
+    const truncated = message.stop_reason === "max_tokens";
+    if (truncated) console.warn(`[tojeong] stop_reason=max_tokens usage=${JSON.stringify(message.usage)}`);
+    return NextResponse.json({ result: stripMarkdown(raw), truncated });
   } catch (err) {
     console.error("[/api/tojeong]", err);
     const msg = err instanceof Error ? err.message : "서버 오류";
