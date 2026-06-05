@@ -20,7 +20,6 @@ export default function Home() {
     { id: "tarot", name: "월령", hanja: "月靈", role: "타로", desc: "카드로 현재와 미래를 보다", tag: "1장 무료", adult: false, image: "/char-wolryeong.png", color: "#a040b0" },
     { id: "jami", name: "성연", hanja: "星淵", role: "자미두수", desc: "별의 자리로 일생을 보다", tag: "기본 무료", adult: false, image: "/char-seongha.png", color: "#2080d0" },
     { id: "milseo", name: "밀서", hanja: "密書", role: "밀서", desc: "은밀한 욕망과 운명의 기운", tag: "성인 전용", adult: true, image: "/char-milseo.png", color: "#c03060" },
-    { id: "pdf", name: "명서", hanja: "命書", role: "사주 PDF", desc: "나만의 사주 풀이를 PDF 한 권으로", tag: "PDF 저장", adult: false, image: "/char-jawun.png", color: "#9070d0" },
   ];
   const tabs = [
     { id: "home", icon: "🏠", label: "홈", free: false, path: "/" },
@@ -106,6 +105,16 @@ function MobileHome({ characters, tabs, activeTab, setActiveTab, router, session
         .duo-sub{font-family:sans-serif;font-size:10px;color:rgba(255,255,255,0.7);letter-spacing:4px;margin-bottom:12px}
         .duo-desc-line{font-family:sans-serif;font-size:11px;color:rgba(255,255,255,0.72);line-height:1.7;margin-bottom:12px}
         .duo-cta{font-family:sans-serif;font-size:10px;letter-spacing:2px;color:#e0c8ff;padding-top:10px;border-top:1px solid rgba(255,255,255,0.13)}
+        .ms-card{position:relative;border-radius:14px;overflow:hidden;cursor:pointer;background:linear-gradient(135deg,rgba(20,14,48,0.9),rgba(50,30,90,0.88));border:1px solid rgba(140,100,200,0.3);transition:all 0.2s}
+        .ms-card:hover{transform:translateY(-2px);border-color:rgba(180,140,240,0.6);box-shadow:0 8px 28px rgba(100,70,180,0.3)}
+        .ms-img-wrap{position:relative;height:180px;overflow:hidden}
+        .ms-img-wrap img{width:100%;height:100%;object-fit:cover;object-position:center 35%;display:block}
+        .ms-img-fade{position:absolute;bottom:0;left:0;right:0;height:50%;background:linear-gradient(to bottom,transparent,rgba(20,10,40,0.92))}
+        .ms-text{position:relative;z-index:2;padding:14px 16px 18px;text-align:center}
+        .ms-name{font-family:'Cinzel','Noto Serif KR',serif;font-size:17px;color:#fff;letter-spacing:4px;margin-bottom:10px;text-shadow:0 0 12px rgba(180,140,255,0.4);font-weight:500}
+        .ms-sub{font-family:sans-serif;font-size:10px;color:rgba(255,255,255,0.55);letter-spacing:3px;margin-bottom:10px}
+        .ms-desc{font-family:sans-serif;font-size:11px;color:rgba(255,255,255,0.68);line-height:1.7;margin-bottom:12px}
+        .ms-cta{font-family:sans-serif;font-size:10px;letter-spacing:2px;color:#c8a8ff;padding-top:10px;border-top:1px solid rgba(255,255,255,0.12)}
         .hfoot{padding:24px 16px 28px;border-top:1px solid rgba(80,140,255,0.08);margin-top:10px;text-align:center}
         .hfoot-links{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-bottom:10px}
         .hfoot-links span{font-family:sans-serif;font-size:11px;color:rgba(160,180,240,0.7);cursor:pointer;letter-spacing:0.5px}
@@ -186,6 +195,21 @@ function MobileHome({ characters, tabs, activeTab, setActiveTab, router, session
                 <div className="duo-sub" style={{fontFamily:"sans-serif",fontSize:10,color:"rgba(255,255,255,0.6)",letterSpacing:3,marginBottom:10}}>사주 · 타로 통합 상담사</div>
                 <div className="duo-desc-line">사주의 흐름과 타로의 직관으로<br/>무엇이든 자유롭게 물어보세요</div>
                 <div className="duo-cta">연애 · 직업 · 재물 · 건강 · 무엇이든 →</div>
+              </div>
+            </div>
+          </div>
+          {/* 명서 — 혜원 아래 */}
+          <div className="section" style={{paddingTop:0}}>
+            <div className="ms-card" onClick={() => router.push("/pdf")}>
+              <div className="ms-img-wrap">
+                <img src="/char-myeongseo.png" alt="명서"/>
+                <div className="ms-img-fade"/>
+              </div>
+              <div className="ms-text">
+                <div className="ms-name">명서 · 命書</div>
+                <div className="ms-sub">사주 정밀 풀이 PDF</div>
+                <div className="ms-desc">나만의 사주 풀이를 아름다운 PDF 한 권으로</div>
+                <div className="ms-cta">코어 ₩9,900 · 전체 ₩19,900 →</div>
               </div>
             </div>
           </div>

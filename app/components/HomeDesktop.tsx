@@ -99,21 +99,28 @@ export function HomeDesktop({ characters }: Props) {
         .d-tag-free{background:rgba(60,120,200,0.3);color:#a8d0ff;border:1px solid rgba(100,160,240,0.5)}
         .d-tag-adult{background:rgba(180,50,90,0.3);color:#ff9ab0;border:1px solid rgba(200,80,120,0.5)}
 
-        /* ───────── 혜원 섹션 ───────── */
-        .d-hw-section{position:relative;z-index:2;max-width:1400px;margin:0 auto;padding:20px 60px 60px}
-        .d-hw-card{position:relative;overflow:hidden;cursor:pointer;background:linear-gradient(135deg,rgba(30,20,70,0.82),rgba(70,25,95,0.82));backdrop-filter:blur(8px);transition:all 0.3s;display:grid;grid-template-columns:300px 1fr;min-height:240px}
-        .d-hw-card:hover{transform:translateY(-4px);box-shadow:0 20px 50px rgba(140,100,220,0.45)}
-        .d-hw-img{position:relative;overflow:hidden}
-        .d-hw-img img{width:100%;height:100%;object-fit:cover;object-position:center 10%;display:block;transition:transform 0.6s}
-        .d-hw-card:hover .d-hw-img img{transform:scale(1.05)}
-        .d-hw-img-fade{position:absolute;top:0;right:0;width:60%;height:100%;background:linear-gradient(to right,transparent,rgba(40,18,68,0.92))}
-        .d-hw-text{position:relative;z-index:2;padding:36px 44px;display:flex;flex-direction:column;justify-content:center}
-        .d-hw-mark{font-family:sans-serif;font-size:10px;letter-spacing:6px;color:#c0a8e8;margin-bottom:10px}
-        .d-hw-name{font-family:'Diphylleia','Noto Serif KR',serif;font-size:32px;color:#fff;letter-spacing:8px;margin-bottom:6px;text-shadow:0 2px 18px rgba(0,0,0,0.9),0 0 20px rgba(220,180,255,0.35)}
-        .d-hw-role{font-family:sans-serif;font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:4px;margin-bottom:18px}
-        .d-hw-desc{font-family:sans-serif;font-size:14px;color:rgba(255,255,255,0.88);line-height:1.85;margin-bottom:22px;text-shadow:0 2px 8px rgba(0,0,0,0.7);max-width:480px}
-        .d-hw-cta{font-family:'Noto Serif KR',serif;font-size:12px;letter-spacing:3px;color:#fff;padding:10px 26px;border:1px solid rgba(220,180,255,0.5);background:rgba(220,180,255,0.06);transition:all 0.2s;align-self:flex-start}
-        .d-hw-card:hover .d-hw-cta{background:rgba(220,180,255,0.2);border-color:#fff}
+        /* ───────── 하단 2칸 섹션 (혜원 + 명서) ───────── */
+        .d-bottom-section{position:relative;z-index:2;max-width:1400px;margin:0 auto;padding:20px 60px 60px}
+        .d-bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+        .d-bot-card{position:relative;overflow:hidden;cursor:pointer;backdrop-filter:blur(8px);transition:all 0.3s;display:grid;grid-template-columns:220px 1fr;min-height:220px}
+        .d-bot-card:hover{transform:translateY(-4px)}
+        .d-bot-card.hw{background:linear-gradient(135deg,rgba(30,20,70,0.85),rgba(70,25,95,0.85));box-shadow:none}
+        .d-bot-card.hw:hover{box-shadow:0 16px 40px rgba(140,100,220,0.45)}
+        .d-bot-card.ms{background:linear-gradient(135deg,rgba(20,14,48,0.88),rgba(50,30,90,0.85));box-shadow:none}
+        .d-bot-card.ms:hover{box-shadow:0 16px 40px rgba(100,70,180,0.4)}
+        .d-bot-img{position:relative;overflow:hidden}
+        .d-bot-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.6s}
+        .d-bot-img.hw img{object-position:center 10%}
+        .d-bot-img.ms img{object-position:center 30%}
+        .d-bot-card:hover .d-bot-img img{transform:scale(1.05)}
+        .d-bot-img-fade{position:absolute;top:0;right:0;width:55%;height:100%;background:linear-gradient(to right,transparent,rgba(30,14,60,0.95))}
+        .d-bot-text{position:relative;z-index:2;padding:28px 30px;display:flex;flex-direction:column;justify-content:center}
+        .d-bot-mark{font-family:sans-serif;font-size:9px;letter-spacing:5px;color:#c0a8e8;margin-bottom:8px}
+        .d-bot-name{font-family:'Diphylleia','Noto Serif KR',serif;font-size:26px;color:#fff;letter-spacing:6px;margin-bottom:4px;text-shadow:0 2px 16px rgba(0,0,0,0.9),0 0 16px rgba(200,160,255,0.3)}
+        .d-bot-role{font-family:sans-serif;font-size:10px;color:rgba(255,255,255,0.5);letter-spacing:3px;margin-bottom:14px}
+        .d-bot-desc{font-family:sans-serif;font-size:12.5px;color:rgba(255,255,255,0.82);line-height:1.8;margin-bottom:18px;text-shadow:0 1px 6px rgba(0,0,0,0.7)}
+        .d-bot-cta{font-family:'Noto Serif KR',serif;font-size:11px;letter-spacing:2px;color:#fff;padding:8px 20px;border:1px solid rgba(200,160,255,0.45);background:rgba(200,160,255,0.06);transition:all 0.2s;align-self:flex-start}
+        .d-bot-card:hover .d-bot-cta{background:rgba(200,160,255,0.2);border-color:#fff}
 
         /* ───────── 푸터 (컴팩트) ───────── */
         .d-footer{position:relative;z-index:2;padding:18px 60px;background:rgba(0,0,0,0.55);backdrop-filter:blur(10px);border-top:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
@@ -186,26 +193,45 @@ export function HomeDesktop({ characters }: Props) {
         </div>
       </section>
 
-      <section className="d-hw-section">
-        <div className="d-sec-tag">✦  慧源  ✦</div>
-        <div className="d-sec-title">AI 통합 상담</div>
-        <div className="d-hw-card" onClick={() => router.push("/hyewon")}>
-          <div className="d-hw-img">
-            <img src="/char-hyewon.png" alt="혜원"
-              onError={(e) => { (e.target as HTMLImageElement).src = "/char-wolryeong.png"; }}
-            />
-            <div className="d-hw-img-fade" />
-          </div>
-          <div className="d-hw-text">
-            <div className="d-hw-mark">AI INTEGRATED CONSULTANT</div>
-            <div className="d-hw-name">혜원 · 慧源</div>
-            <div className="d-hw-role">사주 · 타로 통합 상담사</div>
-            <div className="d-hw-desc">
-              사주의 흐름과 타로의 직관으로<br/>
-              무엇이든 자유롭게 물어보세요<br/>
-              연애 · 직업 · 재물 · 건강 · 인간관계
+      <section className="d-bottom-section">
+        <div className="d-sec-tag">✦  S P E C I A L  ✦</div>
+        <div className="d-sec-title">상담과 기록, 두 가지 방법으로</div>
+        <div className="d-bottom-grid">
+          {/* 혜원 */}
+          <div className="d-bot-card hw" onClick={() => router.push("/hyewon")}>
+            <div className="d-bot-img hw">
+              <img src="/char-hyewon.png" alt="혜원"
+                onError={(e) => { (e.target as HTMLImageElement).src = "/char-wolryeong.png"; }}
+              />
+              <div className="d-bot-img-fade"/>
             </div>
-            <div className="d-hw-cta">지금 상담하기 →</div>
+            <div className="d-bot-text">
+              <div className="d-bot-mark">AI CONSULTANT</div>
+              <div className="d-bot-name">혜원 · 慧源</div>
+              <div className="d-bot-role">사주 · 타로 통합 상담사</div>
+              <div className="d-bot-desc">
+                사주와 타로로 무엇이든<br/>
+                자유롭게 물어보세요
+              </div>
+              <div className="d-bot-cta">지금 상담하기 →</div>
+            </div>
+          </div>
+          {/* 명서 */}
+          <div className="d-bot-card ms" onClick={() => router.push("/pdf")}>
+            <div className="d-bot-img ms">
+              <img src="/char-myeongseo.png" alt="명서"/>
+              <div className="d-bot-img-fade"/>
+            </div>
+            <div className="d-bot-text">
+              <div className="d-bot-mark">SAJU PDF</div>
+              <div className="d-bot-name">명서 · 命書</div>
+              <div className="d-bot-role">사주 정밀 풀이 PDF</div>
+              <div className="d-bot-desc">
+                나만의 사주 풀이를<br/>
+                PDF 한 권으로 받아보세요
+              </div>
+              <div className="d-bot-cta">PDF 받기 →</div>
+            </div>
           </div>
         </div>
       </section>
