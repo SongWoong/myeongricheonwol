@@ -49,3 +49,5 @@ yarn-error.log*
 next-env.d.ts
 *.backup
 .env*.local
+pdf-preview/
+test-output.pdf
